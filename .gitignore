@@ -1,0 +1,8 @@
+# Secret
+/config/global.json
+
+# Node.js
+/node_modules
+
+# Generated
+/build/public/bundle.js
