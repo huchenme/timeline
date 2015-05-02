@@ -179,7 +179,142 @@ Webpack 还支持 webpack-dev-server，一个本地 http 服务器还支持 live
 	}
 	```
 	
-	修改作者名和项目介绍后
+	修改作者名和项目介绍后，安装 Dependencies
+	
+	```
+	$ npm install
+	```
+	
+	安装结束后你会发现文件夹多了个 node_modules 的文件夹，里面安装了 react 和 babel-loader。babel loader 可以转换 es6 到 es5，也可以转换 JSX。
+	
+3. 把 LeanCloud 的文件放入 leancloud 文件夹
+
+	LeanCloud 因为可以当后端用，所以他也会分析上传的 package.json，我们这个文件完全本地使用，连同安装的 node_modules 都没有必要上传到服务器，所以还是把 LeanCloud 的文件夹分开来比较好一点。
+	
+	现在新建一个 `leancloud` 文件夹，把`cloud`，`config`和`public`文件夹移到新建的`leancloud`里面。
+	
+4. 添加 React.js 的 hello world 文件
+
+	1. 在根目录下建立 `src` 文件夹
+	2. 在 `src` 文件夹里添加 `main.js`
+		
+		```javascript
+		const React = require("react");
+		const Container = require("components/Container");
+
+		React.render(<Container />, document.getElementById("main"));
+		```
+		
+	3. 在 `src` 文件夹里添加 `components` 文件夹
+	4. 在 `components` 文件夹里添加 `Container.js`
+	
+		```javascript
+		const React = require("react");
+
+		const Container = React.createClass({
+		  render () {
+		    return (
+		      <h1>Hello World from Webpack & React.js</h1>
+		    );
+		  }
+		});
+
+		module.exports = Container;
+		```
+		
+		注意这里用到了一些 ES6 的语法和 JSX
+	
+5. 在根目录添加 `webpack.config.js`
+	
+	```javascript
+	const webpack = require('webpack');
+
+	module.exports = {
+	  entry: './src/main.js',
+	  output: {
+	    path: './leancloud/public',
+	    filename: 'bundle.js'
+	  },
+	  resolve: {
+	    extensions: ['', '.jsx', '.js'],
+	    modulesDirectories: ["src", "node_modules"]
+	  },
+	  module: {
+	    loaders: [
+	      { test: /\.jsx?$/, loader: 'babel', exclude: /node_modules/ }
+	    ]
+	  }
+	};
+	```
+	这个文件就是告诉 Webpack 如何编译的文件了，我大概讲一下每个的意思：
+	1. `entry` 需要编译的源文件
+	2. `output` 编译后的文件
+		
+		`path`：输出的文件夹
+		`filename`：输入文件
+	3. `resolve`
+		
+		`extensions`：这些文件后缀名在 require 的时候是不用加的，比如在 `main.js` 第二排里的 `Container`
+		`modulesDirectories`: 在查找的 path 里面加上 `src` 和 `node_modules`，比如 `main.js` 里面的 `react` 来自 `node_modules`，`components/Container` 来自 `src`
+	4. `loaders`
+		
+		我这里只用了一个 loader，意思是任何后缀名为 `js` 或者 `jsx` 的都用 `babel` 来解析，但是在 `node_modules` 文件夹里面的除外
+		
+	关于 Webpack 的 config，我这里只接触了皮毛，要想深研究的话，可以去官网看看，或者看这两个：
+	
+	- [webpack-howto](https://github.com/petehunt/webpack-howto)
+	- [Webpack 怎么用](http://segmentfault.com/a/1190000002552008)
+		
+6. 修改 index.ejs
+
+	```html
+	<!DOCTYPE html>
+	<html>
+	  <head>
+	    <meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <title>人生简历</title>
+	  </head>
+	  <body>
+	    <div id="main"></div>
+	    <script src="bundle.js"></script>
+	  </body>
+	</html>
+	```
+	
+	这里我们就需要使用生成的 `bundle.js` 文件
+	
+7. 编译 webpack
+
+	```
+	$ webpack
+	```
+	
+	编译后，你会发现 `leancloud/public/` 文件夹里面多出一个 `bundle.js`
+	
+8. 本地测试
+
+	```
+	cd leancloud
+	avoscloud
+	```
+	
+	浏览器访问 `http://localhost:3000`
+	
+	![screenshot](https://cloud.githubusercontent.com/assets/2078389/7441607/c6fbdb72-f121-11e4-9073-ad8783664813.png)
+	
+9. 上传到 LeanCloud
+
+	```
+	cd ..
+	webpack -p
+	cd leancloud
+	avoscloud deploy
+	avoscloud publish
+	```
+	
+	回到跟目录，编译 webpack 到 production，这会进一步缩小文件大小，然后 deploy 后 publish，访问 `http://timeline.avosapps.com` 你会得到和本地一样的页面
+	
 
 	
 
