@@ -1,0 +1,13 @@
+{
+  "name": "timeline",
+  "version": "1.0.0",
+  "description": "Personal Timeline",
+  "scripts": {
+  },
+  "author": "Hu Chen",
+  "license": "MIT",
+  "dependencies": {
+    "babel-loader": "^5.0.0",
+    "react": "^0.13.2"
+  }
+}
