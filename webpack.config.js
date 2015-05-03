@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
   entry: './src/main.js',
@@ -7,12 +8,16 @@ module.exports = {
     filename: 'bundle.js'
   },
   resolve: {
-    extensions: ['', '.jsx', '.js'],
+    extensions: ['', '.jsx', '.js', '.scss'],
     modulesDirectories: ["src", "node_modules"]
   },
   module: {
     loaders: [
-      { test: /\.jsx?$/, loader: 'babel', exclude: /node_modules/ }
+      { test: /\.jsx?$/, loader: 'babel', exclude: /node_modules/ },
+      { test: /\.scss$/, loader: ExtractTextPlugin.extract('style', 'css!autoprefixer!sass') }
     ]
-  }
+  },
+  plugins: [
+    new ExtractTextPlugin("bundle.css")
+  ]
 };

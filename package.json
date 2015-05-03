@@ -2,12 +2,17 @@
   "name": "timeline",
   "version": "1.0.0",
   "description": "Personal Timeline",
-  "scripts": {
-  },
+  "scripts": {},
   "author": "Hu Chen",
   "license": "MIT",
   "dependencies": {
+    "autoprefixer-loader": "^1.2.0",
     "babel-loader": "^5.0.0",
-    "react": "^0.13.2"
+    "css-loader": "^0.12.0",
+    "extract-text-webpack-plugin": "^0.7.0",
+    "node-sass": "^2.1.1",
+    "react": "^0.13.2",
+    "sass-loader": "^0.4.2",
+    "style-loader": "^0.12.1"
   }
 }

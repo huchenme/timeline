@@ -315,6 +315,252 @@ Webpack 还支持 webpack-dev-server，一个本地 http 服务器还支持 live
 	
 	回到跟目录，编译 webpack 到 production，这会进一步缩小文件大小，然后 deploy 后 publish，访问 `http://timeline.avosapps.com` 你会得到和本地一样的页面
 	
+## Hello World in Component based SASS
+
+我们都知道 Module based JS 文件的好处，那么 css 能不能也是按 Component 来分呢。用 Webpack 的好处之一就是 css 也能组件化，每个 component 都有单独的 css。
+
+1. 添加 `.scss` 到 `webpack.config.js`
+
+	```javascript
+	resolve: {
+	  extensions: ['', '.jsx', '.js', '.scss'],
+	  modulesDirectories: ["src", "node_modules"]
+	}
+	```
+
+2. 添加 SASS loaders
+
+	修改 package.json
+	
+	```javascript
+	"dependencies": {
+   		"autoprefixer-loader": "^1.2.0",
+    	"babel-loader": "^5.0.0",
+    	"css-loader": "^0.12.0",
+    	"node-sass": "^2.1.1",
+    	"react": "^0.13.2",
+    	"sass-loader": "^0.4.2",
+    	"style-loader": "^0.12.1"
+  	}
+	```
+	
+	安装新添加的 loaders，注意 sass-loader 需要是 `0.4.2` 版本，新版本现在貌似用 `@import` 语法有问题
+	
+	```
+	$ npm install
+	```
+	
+	在 webpack.config.js 里添加 loaders
+	
+	```javascript
+	loaders: [
+      { test: /\.jsx?$/, loader: 'babel', exclude: /node_modules/ },
+      { test: /\.scss$/, loader: 'style!css!autoprefixer!sass' }
+    ]
+	```
+
+3. 添加 `src/sass/base.scss`
+	
+	```scss
+	html {
+	  font-family: sans-serif;
+	}
+	```
+
+4. 添加 `src/sass/components/Header.scss`
+
+	```scss
+	.header {
+	  font-weight: bold;
+	}
+	```
+	
+	这里每个 Component 都对应一个 React 的 component
+
+5. 添加 `src/sass/components/Footer.scss`
+
+	```scss
+	.footer {
+	  font-style: italic;
+	}
+	```
+
+6. 添加 `src/sass/components/Container.scss`
+	
+	```
+	@import "../config/colors";
+
+	.container {
+	  background: $red;
+	}
+	```
+	
+	这里展示 SASS 里面的 import 同样可以使用，只不过必须使用 relative path 的方法。
+
+7. 添加 `src/sass/utilities/clearfix.scss`
+	
+	```scss
+	.u-clearfix {
+	  overflow: hidden;
+	}
+	```
+
+8. 添加 `src/sass/config/colors.scss`
+	
+	```scss
+	$red: #f00;
+	```
+
+9. 把 `src/components` 改为 `src/js/components`
+	
+10. 新建 `src/js/components/Header.js`
+
+	```javascript
+	const React = require("react");
+
+	require("sass/components/header");
+	require("sass/utilities/clearfix");
+
+	const Header = React.createClass({
+	  render () {
+	    return (
+	      <div>
+	        <div className="header u-clearfix">
+	          Header
+	        </div>
+	      </div>
+	    );
+	  }
+	});
+
+	module.exports = Header;
+		
+	```
+	
+	现在和 commonJS 一样，每个 Component 都需要 require 对应的 css 文件。比如这里用了 `header` 和 `u-clearfix` 这两个 class，就需要分别 require 他们对应的文件。
+	
+11. 新建 `src/js/components/Footer.js`
+	
+	```javascript
+	const React = require("react");
+
+	require("sass/components/Footer");
+
+	const Footer = React.createClass({
+	  render () {
+	    return (
+	      <div className="footer">
+	        Footer
+	      </div>
+	    );
+	  }
+	});
+
+	module.exports = Footer;
+	```
+
+12. 修改 `src/main.js`
+
+	```javascript
+	const React = require("react");
+	const Container = require("js/components/Container");
+
+	require("sass/base");
+
+	React.render(<Container />, document.getElementById("main"));
+	```
+	
+13. 修改 `src/components/Container.js`
+	
+	```javascript
+	const React = require("react");
+	const Header = require("js/components/Header");
+	const Footer = require("js/components/Footer");
+
+	require("sass/components/Container");
+
+	const Container = React.createClass({
+	  render () {
+	    return (
+	      <div className="container">
+	        <Header />
+	        <Footer />
+	      </div>
+	    );
+	  }
+	});
+
+	module.exports = Container;
+	```
+	
+14. 测试
+	
+	再运行 `webpack` 编译后，在 `localhost` 里面就能看到新的带 css 的页面了
+	
+	![screenshot](https://cloud.githubusercontent.com/assets/2078389/7444077/c0243ea8-f1a7-11e4-8d2b-da0928a5f92d.png)
+	
+	如果你注意，你会发现 css 会自动加载到 header 里面，而不是单独的 css 文件。这就是 webpack 的一个独特的地方，他只会加载当前页面需要的 css 文件，如果你的 App 有很多页面，比如 admin 的话，在页面 A 就不会加载页面 B 的 style。
+	
+	当然这么做也会有一些弊端，比如如果 css 文件很大的话，那么在页面加载过程中会出现几秒没有美化的页面，直到整个 bundle.js 加载成功才会出现美化。
+	
+15. 单一 css 文件
+	
+	要解决这个问题，可以使用一个 webpack 的 plugin
+	
+	```
+	$ npm install extract-text-webpack-plugin --save
+	```
+	
+	修改 webpack.config.js
+	
+	```javascript
+	const webpack = require('webpack');
+	const ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+	module.exports = {
+	  entry: './src/main.js',
+	  output: {
+	    path: './leancloud/public',
+	    filename: 'bundle.js'
+	  },
+	  resolve: {
+	    extensions: ['', '.jsx', '.js', '.scss'],
+	    modulesDirectories: ["src", "node_modules"]
+	  },
+	  module: {
+	    loaders: [
+	      { test: /\.jsx?$/, loader: 'babel', exclude: /node_modules/ },
+	      { test: /\.scss$/, loader: ExtractTextPlugin.extract('style', 'css!autoprefixer!sass') }
+	    ]
+	  },
+	  plugins: [
+	    new ExtractTextPlugin("bundle.css")
+	  ]
+	};
+	```
+	
+	再运行 `webpack`，你会发现 `leancloud/public` 里面，除了 bundle.js 之外，还多出了一个 bundle.css
+	
+	现在在 `index.ejs` 里面的 header 里加上
+	
+	```html
+	<link rel="stylesheet" href="app.css" />
+	```
+	
+	刷新浏览器，你会发现一样的结果，只不过现在的 style 都在 bundle.css 里面了
+	
+16. 部署到 production
+	
+	```
+	$ webpack -p
+	$ cd leancloud
+	$ avoscloud deploy
+	$ avoscloud publish
+	```
+	
+	现在访问 `timeline.avosapps.com`，能看到刚才的修改都已经上线了。
+
+	
 
 	
 
