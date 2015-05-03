@@ -6,7 +6,7 @@
 
 ## 教程
 
-- [第一周：LeanCloud Web hosting & Webpack](https://github.com/huchenme/timeline/blob/master/docs/WEEK1.md)
+- [第一周：LeanCloud Web hosting & Webpack](https://github.com/huchenme/timeline/blob/master/docs/WEEK1.md) [源码](https://github.com/huchenme/timeline/tree/week1)
 - 第二周：React.js & Flux
 - 第三周：连接 LeanCloud 后端
 - 第四周：部署
