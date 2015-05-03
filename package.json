@@ -2,9 +2,16 @@
   "name": "timeline",
   "version": "1.0.0",
   "description": "Personal Timeline",
-  "scripts": {},
   "author": "Hu Chen",
   "license": "MIT",
+  "scripts": {
+    "start": "cd build && avoscloud -P 4567 && cd $OLDPWD",
+    "watch": "BUILD_DEV=1 webpack --watch",
+    "build": "npm run clean && NODE_ENV=production webpack -p",
+    "clean": "rm -rf leancloud/public/*",
+    "deploy": "npm run build && cd leancloud && avoscloud deploy && cd $OLDPWD",
+    "publish": "cd leancloud && avoscloud publish && cd $OLDPWD"
+  },
   "dependencies": {
     "autoprefixer-loader": "^1.2.0",
     "babel-loader": "^5.0.0",

@@ -544,7 +544,7 @@ Webpack 还支持 webpack-dev-server，一个本地 http 服务器还支持 live
 	现在在 `index.ejs` 里面的 header 里加上
 	
 	```html
-	<link rel="stylesheet" href="app.css" />
+	<link rel="stylesheet" href="bundle.css" />
 	```
 	
 	刷新浏览器，你会发现一样的结果，只不过现在的 style 都在 bundle.css 里面了
@@ -559,6 +559,24 @@ Webpack 还支持 webpack-dev-server，一个本地 http 服务器还支持 live
 	```
 	
 	现在访问 `timeline.avosapps.com`，能看到刚才的修改都已经上线了。
+	
+17. 把常用的命令放到 package.json 里面
+
+	修改 package.json
+
+	```javascript
+	"scripts": {
+		"start": "cd build && avoscloud -P 4567 && cd $OLDPWD",
+		"watch": "BUILD_DEV=1 webpack --watch",
+		"build": "npm run clean && NODE_ENV=production webpack -p",
+		"clean": "rm -rf leancloud/public/*",
+		"deploy": "npm run build && cd leancloud && avoscloud deploy && cd $OLDPWD",
+		"publish": "cd leancloud && avoscloud publish && cd $OLDPWD"
+	},
+	```
+
+	现在用 `npm run deploy` 的话就可以先清除 `public` 文件夹，再编译 webpack，然后再 deploy 到 LeanCloud
+
 
 	
 
