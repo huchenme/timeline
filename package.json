@@ -7,9 +7,9 @@
   "scripts": {
     "start": "cd leancloud && avoscloud -P 4567 && cd $OLDPWD",
     "watch": "BUILD_DEV=1 webpack --watch",
-    "build": "npm run clean && NODE_ENV=production webpack -p",
     "clean": "rm -rf leancloud/public/*",
-    "deploy": "npm run build && cd leancloud && avoscloud deploy && cd $OLDPWD",
+    "build": "npm run clean && NODE_ENV=production webpack -p",
+    "deploy": "cd leancloud && avoscloud deploy && cd $OLDPWD",
     "publish": "cd leancloud && avoscloud publish && cd $OLDPWD"
   },
   "dependencies": {

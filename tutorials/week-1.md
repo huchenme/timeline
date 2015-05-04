@@ -682,15 +682,15 @@ Webpack 还支持 webpack-dev-server，一个本地 http 服务器还支持 live
 	```javascript
 	"scripts": {
 		"start": "cd leancloud && avoscloud -P 4567 && cd $OLDPWD",
-		"watch": "BUILD_DEV=1 webpack --watch",
-		"build": "npm run clean && NODE_ENV=production webpack -p",
-		"clean": "rm -rf leancloud/public/*",
-		"deploy": "npm run build && cd leancloud && avoscloud deploy && cd $OLDPWD",
-		"publish": "cd leancloud && avoscloud publish && cd $OLDPWD"
+    "watch": "BUILD_DEV=1 webpack --watch",
+    "clean": "rm -rf leancloud/public/*",
+    "build": "npm run clean && NODE_ENV=production webpack -p",
+    "deploy": "cd leancloud && avoscloud deploy && cd $OLDPWD",
+    "publish": "cd leancloud && avoscloud publish && cd $OLDPWD"
 	},
 	```
 
-	现在用 `npm run deploy` 的话就可以先清除 `public` 文件夹，再编译 webpack，然后再 deploy 到 LeanCloud
+	现在用 `npm run XX` 就可以跑一些常用的命令，你也可以把其中一些打包起来
 
 ### 资源
 
@@ -701,6 +701,3 @@ Webpack 还支持 webpack-dev-server，一个本地 http 服务器还支持 live
 - [SUIT CSS naming conventions](https://github.com/suitcss/suit/blob/master/doc/naming-conventions.md)
 
 ### [本周源码](https://github.com/huchenme/timeline/tree/week1)
-
-
-
