@@ -394,7 +394,7 @@ Webpack 还支持 webpack-dev-server，一个本地 http 服务器还支持 live
 
 4. 添加 `src/css/components/header.css`
 
-	```scss
+	```css
 	.tl-Header {
 	  font-weight: bold;
 	}
@@ -404,7 +404,7 @@ Webpack 还支持 webpack-dev-server，一个本地 http 服务器还支持 live
 
 5. 添加 `src/css/components/footer.css`
 
-	```scss
+	```css
 	.tl-Footer {
 	  font-style: italic;
 	}
@@ -412,7 +412,7 @@ Webpack 还支持 webpack-dev-server，一个本地 http 服务器还支持 live
 
 6. 添加 `src/css/components/container.css`
 
-	```scss
+	```css
 	.tl-Container {
 	  background: var(--color-red);
 	}
@@ -422,7 +422,7 @@ Webpack 还支持 webpack-dev-server，一个本地 http 服务器还支持 live
 
 7. 添加 `src/css/variables.css`
 
-	```scss
+	```css
 	/**
 	 * Breakpoints
 	 */
@@ -589,7 +589,7 @@ Webpack 还支持 webpack-dev-server，一个本地 http 服务器还支持 live
 
 	再运行 `webpack` 编译后，在 `localhost` 里面就能看到新的带 css 的页面了
 
-	![screenshot](https://cloud.githubusercontent.com/assets/2078389/7444077/c0243ea8-f1a7-11e4-8d2b-da0928a5f92d.png)
+	![screenshot](https://cloud.githubusercontent.com/assets/2078389/7451397/d007d6f0-f282-11e4-834a-ab2e3393810b.png)
 
 	如果你注意，你会发现 css 会自动加载到 header 里面，而不是单独的 css 文件。这就是 webpack 的一个独特的地方，他只会加载当前页面需要的 css 文件，如果你的 App 有很多页面，比如 admin 的话，在页面 A 就不会加载页面 B 的 style。
 
