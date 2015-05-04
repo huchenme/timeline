@@ -23,6 +23,8 @@
 8. 打开浏览器 `http://localhost:4567` 测试
 9. 部署请参考 [第一周：LeanCloud Web hosting & Webpack & PostCSS & SUIT CSS](https://github.com/huchenme/timeline/blob/master/tutorials/week-1.md)
 
+本 Repo 是结合 LeanCloud 的 Web Hosting，不过不需要的话，可以考虑参考另一个自带 live reload 的 Repo https://github.com/huchenme/react-hot-postcss-boilerplate
+
 ## Bug
 
 请开新的 issue，或者提交 pull request
