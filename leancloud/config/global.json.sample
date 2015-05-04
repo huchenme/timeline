@@ -1,8 +1,8 @@
 {
-    "applicationName" : "timeline",
-    "applicationId": "",
-    "applicationKey": "",
-    "global": {
-        "avVersion": "0.3.1"
-    }
+  "applicationName" : "timeline",
+  "applicationId": "",
+  "applicationKey": "",
+  "global": {
+    "avVersion": "0.3.1"
+  }
 }

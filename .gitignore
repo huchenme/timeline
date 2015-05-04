@@ -1,11 +1,11 @@
 # Secret
-/config/global.json
+leancloud/config/global.json
 
 # Node.js
-/node_modules
+node_modules
 
 # Generated
-/leancloud/public/*.js
-/leancloud/public/*.css
+leancloud/public/*.js
+leancloud/public/*.css
 
 *.log
