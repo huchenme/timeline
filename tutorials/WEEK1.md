@@ -1,4 +1,4 @@
-# 第一周
+# 第一周：LeanCloud Web hosting & Webpack & PostCSS
 
 ## 1. Hello World in LeanCloud
 
@@ -145,7 +145,7 @@ Creating project...
 
 ## 2. Hello World in Webpack & React.js
 
-这个项目打算用 React.js，目前主流用编译 CommonJS 的工具有 Browserify 和 Webpack，这个项目我打算用没尝试过的 Webpack 来做。Webpack 的功能非常强大，Instagram 的网页版就是用的它。用不同的 loader，可以实现 es6 语法，编译 PostCSS，小图片自动转换成 data-url 等等的功能。
+这个项目打算用 React.js，目前主流用编译 CommonJS 的工具有 Browserify 和 Webpack，这个项目我打算用没尝试过的 Webpack 来做。Webpack 的功能非常强大，Instagram 的网页版就是用的它。用不同的 loader，可以实现 es6 语法，编译 sass，小图片自动转换成 data-url 等等的功能。
 
 Webpack 还支持 webpack-dev-server，一个本地 http 服务器还支持 live reload，但是这个项目我们需要用到 LeanCloud，就用 LeanCloud 自带的本地服务器就好。
 
