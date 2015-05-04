@@ -7,3 +7,5 @@
 # Generated
 /leancloud/public/*.js
 /leancloud/public/*.css
+
+*.log

@@ -1,13 +1,12 @@
 const React = require("react");
 
-require("sass/components/Header");
-require("sass/utilities/clearfix");
+require("css/components/header");
 
 const Header = React.createClass({
   render () {
     return (
       <div>
-        <div className="header u-clearfix">
+        <div className="tl-Header">
           Header
         </div>
       </div>

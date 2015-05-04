@@ -145,7 +145,7 @@ Creating project...
 
 ## 2. Hello World in Webpack & React.js
 
-这个项目打算用 React.js，目前主流用编译 CommonJS 的工具有 Browserify 和 Webpack，这个项目我打算用没尝试过的 Webpack 来做。Webpack 的功能非常强大，Instagram 的网页版就是用的它。用不同的 loader，可以实现 es6 语法，编译 sass，小图片自动转换成 data-url 等等的功能。
+这个项目打算用 React.js，目前主流用编译 CommonJS 的工具有 Browserify 和 Webpack，这个项目我打算用没尝试过的 Webpack 来做。Webpack 的功能非常强大，Instagram 的网页版就是用的它。用不同的 loader，可以实现 es6 语法，编译 PostCSS，小图片自动转换成 data-url 等等的功能。
 
 Webpack 还支持 webpack-dev-server，一个本地 http 服务器还支持 live reload，但是这个项目我们需要用到 LeanCloud，就用 LeanCloud 自带的本地服务器就好。
 
@@ -315,117 +315,234 @@ Webpack 还支持 webpack-dev-server，一个本地 http 服务器还支持 live
 
 	回到跟目录，编译 webpack 到 production，这会进一步缩小文件大小，然后 deploy 后 publish，访问 `http://timeline.avosapps.com` 你会得到和本地一样的页面
 
-## Hello World in Component based SASS
+## Hello World in PostCSS
 
 我们都知道 Module based JS 文件的好处，那么 css 能不能也是按 Component 来分呢。用 Webpack 的好处之一就是 css 也能组件化，每个 component 都有单独的 css。
 
-1. 添加 `.scss` 到 `webpack.config.js`
+这里我们用 PostCSS 来建立我们的 style，现在好像国内只有淘宝在用 PostCSS，据说 Bootstrap 4 会用 PostCSS 来重写。我觉得这时候我有必要来尝个鲜。
 
-	```javascript
-	resolve: {
-	  extensions: ['', '.jsx', '.js', '.scss'],
-	  modulesDirectories: ["src", "node_modules"]
-	}
-	```
-
-2. 添加 SASS loaders
-
-	修改 package.json
+1. 	修改 package.json
 
 	```javascript
 	"dependencies": {
-   		"autoprefixer-loader": "^1.2.0",
-    	"babel-loader": "^5.0.0",
-    	"css-loader": "^0.12.0",
-    	"node-sass": "^2.1.1",
-    	"react": "^0.13.2",
-    	"sass-loader": "^0.4.2",
-    	"style-loader": "^0.12.1"
+		"babel-loader": "^5.0.0",
+		"css-loader": "^0.12.0",
+		"postcss-loader": "^0.4.2",
+		"react": "^0.13.2",
+		"style-loader": "^0.12.1",
+		"cssnext": "^1.4.0",
+		"suitcss": "latest",
+		"suitcss-base": "latest",
+		"suitcss-components-arrange": "latest",
+		"suitcss-components-button": "latest",
+		"suitcss-components-flex-embed": "latest",
+		"suitcss-components-grid": "latest",
+		"suitcss-utils-align": "latest",
+		"suitcss-utils-display": "latest",
+		"suitcss-utils-layout": "latest",
+		"suitcss-utils-link": "latest",
+		"suitcss-utils-offset": "latest",
+		"suitcss-utils-position": "latest",
+		"suitcss-utils-size": "latest",
+		"suitcss-utils-text": "latest"
   	}
 	```
 
-	安装新添加的 loaders，注意 sass-loader 需要是 `0.4.2` 版本，新版本现在貌似用 `@import` 语法有问题
+	安装新添加的 loaders
 
 	```
 	$ npm install
 	```
 
-	在 webpack.config.js 里添加 loaders
+2. 修改 `webpack.config.js` 来使用 postcss
 
 	```javascript
-	loaders: [
-      { test: /\.jsx?$/, loader: 'babel', exclude: /node_modules/ },
-      { test: /\.scss$/, loader: 'style!css!autoprefixer!sass' }
-    ]
+	const cssnext = require('cssnext');
+
+	module.exports = {
+	  entry: './src/main.js',
+	  output: {
+	    path: './leancloud/public',
+	    filename: 'bundle.js'
+	  },
+	  resolve: {
+	    extensions: ['', '.jsx', '.js', '.css'],
+	    modulesDirectories: ["src", "node_modules"]
+	  },
+	  module: {
+	    loaders: [
+	      { test: /\.jsx?$/, loader: 'babel', exclude: /node_modules/ },
+	      { test: /\.css$/, loader: 'style!css!postcss' }
+	    ]
+	  },
+	  postcss: [
+	    cssnext({
+	      import: {
+	        path: ['node_modules', 'src/css']
+	      }
+	    })
+	  ]
+	};
 	```
 
-3. 添加 `src/sass/base.scss`
+3. 添加 `src/css/base.css`
 
 	```scss
-	html {
-	  font-family: sans-serif;
-	}
+	@import "suitcss-base";
+	@import "variables";
 	```
 
-4. 添加 `src/sass/components/Header.scss`
+4. 添加 `src/css/components/header.css`
 
 	```scss
-	.header {
+	.tl-Header {
 	  font-weight: bold;
 	}
 	```
 
-	这里每个 Component 都对应一个 React 的 component
+	这里每个 Component 都对应一个 React 的 component，我用到了 [SUIT CSS 的命名规则](https://github.com/suitcss/suit/blob/master/doc/naming-conventions.md)，为了避免和别的 css 冲突，我也用到了 namespace `tl` 来代表 `timeline`
 
-5. 添加 `src/sass/components/Footer.scss`
+5. 添加 `src/css/components/footer.css`
 
 	```scss
-	.footer {
+	.tl-Footer {
 	  font-style: italic;
 	}
 	```
 
-6. 添加 `src/sass/components/Container.scss`
-
-	```
-	@import "../config/colors";
-
-	.container {
-	  background: $red;
-	}
-	```
-
-	这里展示 SASS 里面的 import 同样可以使用，只不过必须使用 relative path 的方法。
-
-7. 添加 `src/sass/utilities/clearfix.scss`
+6. 添加 `src/css/components/container.css`
 
 	```scss
-	.u-clearfix {
-	  overflow: hidden;
+	.tl-Container {
+	  background: var(--color-red);
 	}
+
+	@import "variables";
 	```
 
-8. 添加 `src/sass/config/colors.scss`
+7. 添加 `src/css/variables.css`
 
 	```scss
-	$red: #f00;
+	/**
+	 * Breakpoints
+	 */
+
+	@custom-media --sm-viewport (min-width:320px);
+	@custom-media --md-viewport (min-width:640px);
+	@custom-media --lg-viewport (min-width:960px);
+
+	/**
+	 * Colors
+	 */
+
+	:root {
+	  --color-twitter-blue: #55acee;
+	  --color-white: #fff;
+
+	  /* Primary grays */
+	  --color-charcoal: #292f33;
+	  --color-dark-gray: #66757f;
+	  --color-medium-gray: #8899a6;
+	  --color-gray: #ccd6dd;
+	  --color-border-gray: #e1e8ed;
+	  --color-faint-gray: #f5f8fa;
+
+	  /* Primary blues */
+	  --color-dark-blue: #226699;
+	  --color-deep-blue: #3b88c3;
+	  --color-light-blue: #88c9f9;
+
+	  /* Secondary colors */
+	  --color-orange: #ffac33;
+	  --color-green: #77b255;
+	  --color-purple: #9266cc;
+	  --color-red: #dd2e44;
+	  --color-yellow: #ffcc4d;
+
+	  /* Secondary color variants */
+	  --color-dark-orange: #f4900c;
+	  --color-dark-green: #3e721d;
+	  --color-dark-purple: #553788;
+	  --color-dark-red: #a0041e;
+	  --color-deep-green: #5c913b;
+	  --color-deep-purple: #744eaa;
+	  --color-deep-red: #be1931;
+	  --color-light-yellow: #ffd983;
+	  --color-light-green: #a6d388;
+	  --color-light-purple: #aa8dd8;
+	  --color-light-red: #ea596e;
+	  --color-faded-yellow: #ffe8b6;
+	  --color-faded-green: #c6e5b3;
+	  --color-faded-blue: #bbddf5;
+	  --color-faded-purple: #cbb7ea;
+	  --color-faded-red: #f4abba;
+	}
+
+	/**
+	 * Fonts
+	 */
+
+	:root {
+	  --font-size: 16px;
+	  --font-family: sans-serif;
+	  --line-height: 1.4;
+	}
+
+	/**
+	 * Spacing
+	 */
+
+	:root {
+	  --space-small-px: 10px;
+	  --space-medium-px: 15px;
+	  --space-large-px: 20px;
+	}
+
 	```
 
-9. 把 `src/components` 改为 `src/js/components`
+	这里都是用的 CSS4 的语法，主要用来改 SUIT CSS 的一些参数，和我们会用到的各个组件的参数
+
+8. 把 `src/components` 改为 `src/js/components`
+
+9. 新建 `src/js/components/Container.js`
+
+	```javascript
+	const React = require("react");
+	const Header = require("js/components/Header");
+	const Footer = require("js/components/Footer");
+
+	require("css/components/container");
+	require("suitcss-utils-layout");
+
+	const Container = React.createClass({
+	  render () {
+	    return (
+	      <div className="tl-Container u-cf">
+	        <Header />
+	        <Footer />
+	      </div>
+	    );
+	  }
+	});
+
+	module.exports = Container;
+
+	```
+
+	现在和 commonJS 一样，每个 Component 都需要 require 对应的 css 文件。比如这里用了 `tl-Container` 和 `u-cf` 这两个 class，就需要分别 require 他们对应的文件。
 
 10. 新建 `src/js/components/Header.js`
 
 	```javascript
 	const React = require("react");
 
-	require("sass/components/header");
-	require("sass/utilities/clearfix");
+	require("css/components/header");
 
 	const Header = React.createClass({
 	  render () {
 	    return (
 	      <div>
-	        <div className="header u-clearfix">
+	        <div className="tl-Header">
 	          Header
 	        </div>
 	      </div>
@@ -434,17 +551,14 @@ Webpack 还支持 webpack-dev-server，一个本地 http 服务器还支持 live
 	});
 
 	module.exports = Header;
-
 	```
-
-	现在和 commonJS 一样，每个 Component 都需要 require 对应的 css 文件。比如这里用了 `header` 和 `u-clearfix` 这两个 class，就需要分别 require 他们对应的文件。
 
 11. 新建 `src/js/components/Footer.js`
 
 	```javascript
 	const React = require("react");
 
-	require("sass/components/Footer");
+	require("css/components/footer");
 
 	const Footer = React.createClass({
 	  render () {
@@ -465,35 +579,13 @@ Webpack 还支持 webpack-dev-server，一个本地 http 服务器还支持 live
 	const React = require("react");
 	const Container = require("js/components/Container");
 
-	require("sass/base");
+	require("css/base");
 
 	React.render(<Container />, document.getElementById("main"));
+
 	```
 
-13. 修改 `src/components/Container.js`
-
-	```javascript
-	const React = require("react");
-	const Header = require("js/components/Header");
-	const Footer = require("js/components/Footer");
-
-	require("sass/components/Container");
-
-	const Container = React.createClass({
-	  render () {
-	    return (
-	      <div className="container">
-	        <Header />
-	        <Footer />
-	      </div>
-	    );
-	  }
-	});
-
-	module.exports = Container;
-	```
-
-14. 测试
+13. 测试
 
 	再运行 `webpack` 编译后，在 `localhost` 里面就能看到新的带 css 的页面了
 
@@ -515,7 +607,12 @@ Webpack 还支持 webpack-dev-server，一个本地 http 服务器还支持 live
 
 	```javascript
 	const webpack = require('webpack');
-	const ExtractTextPlugin = require("extract-text-webpack-plugin");
+	const ExtractTextPlugin = require('extract-text-webpack-plugin');
+	const cssnext = require('cssnext');
+
+	const definePlugin = new webpack.DefinePlugin({
+	  __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'false'))
+	});
 
 	module.exports = {
 	  entry: './src/main.js',
@@ -524,22 +621,40 @@ Webpack 还支持 webpack-dev-server，一个本地 http 服务器还支持 live
 	    filename: 'bundle.js'
 	  },
 	  resolve: {
-	    extensions: ['', '.jsx', '.js', '.scss'],
+	    extensions: ['', '.jsx', '.js', '.css'],
 	    modulesDirectories: ["src", "node_modules"]
 	  },
 	  module: {
 	    loaders: [
 	      { test: /\.jsx?$/, loader: 'babel', exclude: /node_modules/ },
-	      { test: /\.scss$/, loader: ExtractTextPlugin.extract('style', 'css!autoprefixer!sass') }
+	      { test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css!postcss') }
 	    ]
 	  },
+	  postcss: [
+	    cssnext({
+	      import: {
+	        path: ['node_modules', 'src/css']
+	      }
+	    })
+	  ],
 	  plugins: [
+	    definePlugin,
 	    new ExtractTextPlugin("bundle.css")
 	  ]
 	};
 	```
 
 	再运行 `webpack`，你会发现 `leancloud/public` 里面，除了 bundle.js 之外，还多出了一个 bundle.css
+
+	注意这里我还加了段 `definePlugin`，有什么用呢？如果在你的源码里面加入
+
+	```javascript
+	if (__DEV__) {
+	  console.log('Dev');
+	}
+	```
+
+	的话，那么这一段只会在本地运行，在 `webpack -p` 的时候这段代码会被自动移除掉
 
 	现在在 `index.ejs` 里面的 header 里加上
 
@@ -566,7 +681,7 @@ Webpack 还支持 webpack-dev-server，一个本地 http 服务器还支持 live
 
 	```javascript
 	"scripts": {
-		"start": "cd build && avoscloud -P 4567 && cd $OLDPWD",
+		"start": "cd leancloud && avoscloud -P 4567 && cd $OLDPWD",
 		"watch": "BUILD_DEV=1 webpack --watch",
 		"build": "npm run clean && NODE_ENV=production webpack -p",
 		"clean": "rm -rf leancloud/public/*",
@@ -577,8 +692,15 @@ Webpack 还支持 webpack-dev-server，一个本地 http 服务器还支持 live
 
 	现在用 `npm run deploy` 的话就可以先清除 `public` 文件夹，再编译 webpack，然后再 deploy 到 LeanCloud
 
+### 资源
 
-## [本周源码](https://github.com/huchenme/timeline/tree/week1)
+- [Smarter CSS builds with Webpack](http://bensmithett.com/smarter-css-builds-with-webpack/)
+- [GitHub Webpack CSS example](https://github.com/bensmithett/webpack-css-example)
+- [react-webpack-cookbook](https://christianalfoni.github.io/react-webpack-cookbook)
+- [SUIT CSS](https://suitcss.github.io/)
+- [SUIT CSS naming conventions](https://github.com/suitcss/suit/blob/master/doc/naming-conventions.md)
+
+### [本周源码](https://github.com/huchenme/timeline/tree/week1)
 
 
 

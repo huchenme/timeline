@@ -1,6 +1,6 @@
 const React = require("react");
 
-require("sass/components/Footer");
+require("css/components/footer");
 
 const Footer = React.createClass({
   render () {
