@@ -1,4 +1,4 @@
-# 第一周：LeanCloud Web hosting & Webpack & PostCSS
+# 第一周：LeanCloud Web hosting & Webpack & PostCSS & SUIT CSS
 
 ## 1. Hello World in LeanCloud
 

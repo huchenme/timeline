@@ -6,7 +6,7 @@
 
 ## 教程
 
-- [第一周：LeanCloud Web hosting & Webpack & PostCSS](https://github.com/huchenme/timeline/blob/master/tutorials/week-1.md)， [源码](https://github.com/huchenme/timeline/tree/week1)
+- [第一周：LeanCloud Web hosting & Webpack & PostCSS & SUIT CSS](https://github.com/huchenme/timeline/blob/master/tutorials/week-1.md)， [源码](https://github.com/huchenme/timeline/tree/week1)
 - 第二周：React.js & Flux
 - 第三周：连接 LeanCloud 后端
 - 第四周：部署
@@ -21,7 +21,7 @@
 6. `npm run watch` 自动编译
 7. `npm run start` 开始本地服务器
 8. 打开浏览器 `http://localhost:4567` 测试
-9. 部署请参考 [第一周：LeanCloud Web hosting & Webpack](https://github.com/huchenme/timeline/blob/master/tutorials/week-1.md)
+9. 部署请参考 [第一周：LeanCloud Web hosting & Webpack & PostCSS & SUIT CSS](https://github.com/huchenme/timeline/blob/master/tutorials/week-1.md)
 
 ## Bug
 
