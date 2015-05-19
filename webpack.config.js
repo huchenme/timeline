@@ -9,7 +9,7 @@ const definePlugin = new webpack.DefinePlugin({
 module.exports = {
   entry: './src/main.js',
   output: {
-    path: './leancloud/public',
+    path: './public',
     filename: 'bundle.js'
   },
   resolve: {

@@ -12,11 +12,15 @@
     "deploy": "cd leancloud && avoscloud deploy && cd $OLDPWD",
     "publish": "cd leancloud && avoscloud publish && cd $OLDPWD"
   },
-  "dependencies": {
+  "devDependencies": {
     "babel-loader": "^5.0.0",
     "css-loader": "^0.12.0",
     "cssnext": "^1.4.0",
     "extract-text-webpack-plugin": "^0.7.0",
+    "fluxxor": "^1.5.3",
+    "keymirror": "^0.1.1",
+    "marked": "^0.3.3",
+    "moment": "^2.10.2",
     "postcss-loader": "^0.4.2",
     "react": "^0.13.2",
     "style-loader": "^0.12.1",

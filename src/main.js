@@ -1,6 +1,24 @@
 const React = require("react");
-const Container = require("js/components/Container");
+const Fluxxor = require("fluxxor");
+const App = require("js/components/App");
+
+// const stores = {
+//   TodoStore: new TodoStore()
+// };
+
+// const actions = {
+//   user: UserActions,
+//   guest: GuestActions
+// }
+
+// const flux = new Fluxxor.Flux(stores, actions);
+
+// if (__DEV__) {
+//   flux.on("dispatch", function(type, payload) {
+//     console.log("[Dispatch]", type, payload);
+//   });
+// }
 
 require("css/base");
 
-React.render(<Container />, document.getElementById("main"));
+React.render(<App />, document.getElementById("main"));
