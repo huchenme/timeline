@@ -149,21 +149,46 @@
 	    }
 	    return {
 	      date: date,
-	      text: this.props.item && this.props.item.text || ''
+	      text: this.props.item && this.props.item.text || '',
+	      dateError: null,
+	      textError: null
 	    };
 	  },
 	  _onSubmit: function _onSubmit(e) {
 	    e.preventDefault();
-
 	    var id = (new Date() + Math.floor(Math.random() * 999999)).toString(36);
-	    var objectDate = moment(this.state.date).toDate();
-
-	    this.props.onFormSubmit({ objectId: id, date: objectDate, text: this.state.text });
-
+	    var dateError = undefined,
+	        textError = undefined;
+	    if (this.state.text.trim() === '') {
+	      textError = 'empty text';
+	      console.log('empty text');
+	    } else {
+	      textError = null;
+	    }
+	    if (this.state.date.trim() === '') {
+	      dateError = 'empty date';
+	      console.log('empty date');
+	    } else if (!this._isValidDate(this.state.date.trim())) {
+	      dateError = 'invalid date';
+	      console.log('invalid date');
+	    } else {
+	      dateError = null;
+	    }
 	    this.setState({
-	      date: '',
-	      text: ''
+	      dateError: dateError,
+	      textError: textError
 	    });
+	    if (dateError === null && textError === null) {
+	      var objectDate = moment(this.state.date).toDate();
+	      this.props.onFormSubmit({ objectId: id, date: objectDate, text: this.state.text });
+	      this.setState({
+	        date: '',
+	        text: ''
+	      });
+	    }
+	  },
+	  _isValidDate: function _isValidDate(text) {
+	    return /^\d{4}-\d{2}-\d{2}$/.test(text) && moment(text).isValid();
 	  },
 	  _onDateChange: function _onDateChange(e) {
 	    this.setState({
