@@ -6,7 +6,7 @@ const AppConstants = require('js/constants/AppConstants');
 
 const TimelineList = React.createClass({
   propTypes: {
-    list: ReactPropTypes.object.isRequired
+    list: ReactPropTypes.array.isRequired
   },
   getInitialState() {
     return {

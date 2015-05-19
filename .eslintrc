@@ -23,7 +23,7 @@
     'no-unused-expressions': 0,
     'no-var': 1,
     'no-alert': 0,
-    'object-shorthand': [1, 'always'],
+    'object-shorthand': [1, 'methods'],
     'react/prop-types': 1,
     'react/jsx-no-undef': 2,
     'react/no-unknown-property': 2,
