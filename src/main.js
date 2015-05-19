@@ -1,6 +1,6 @@
-const React = require("react");
-const Fluxxor = require("fluxxor");
-const App = require("js/components/App");
+const React = require('react');
+// const Fluxxor = require("fluxxor");
+const App = require('js/components/App');
 
 // const stores = {
 //   TodoStore: new TodoStore()
@@ -19,6 +19,6 @@ const App = require("js/components/App");
 //   });
 // }
 
-require("css/base");
+require('css/base');
 
-React.render(<App />, document.getElementById("main"));
+React.render(<App />, document.getElementById('main'));

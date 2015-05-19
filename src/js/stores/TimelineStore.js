@@ -1,9 +1,12 @@
-var TodoStore = Fluxxor.createStore({
-  initialize: function() {
+const Fluxxor = require('fluxxor');
+const constants = require('js/constants/AppConstants');
+
+const TodoStore = Fluxxor.createStore({
+  initialize() {
     this.timelines = [
       {
-        text: "this is *some* markdown",
-        date: "2014-12-31T16:00:00.000Z"
+        text: 'this is *some* markdown',
+        date: '2014-12-31T16:00:00.000Z'
       }
     ];
 
@@ -14,26 +17,28 @@ var TodoStore = Fluxxor.createStore({
     );
   },
 
-  onAddTodo: function(payload) {
+  onAddTodo(payload) {
     this.todos.push({text: payload.text, complete: false});
-    this.emit("change");
+    this.emit('change');
   },
 
-  onToggleTodo: function(payload) {
+  onToggleTodo(payload) {
     payload.todo.complete = !payload.todo.complete;
-    this.emit("change");
+    this.emit('change');
   },
 
-  onClearTodos: function() {
+  onClearTodos() {
     this.todos = this.todos.filter(function(todo) {
       return !todo.complete;
     });
-    this.emit("change");
+    this.emit('change');
   },
 
-  getState: function() {
+  getState() {
     return {
       todos: this.todos
     };
   }
 });
+
+module.exports = TodoStore;

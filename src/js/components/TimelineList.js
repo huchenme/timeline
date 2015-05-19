@@ -1,15 +1,15 @@
-const React = require("react");
-const TimelineItem = require("js/components/TimelineItem");
+const React = require('react');
+const TimelineItem = require('js/components/TimelineItem');
 
 const TimelineList = React.createClass({
-  render () {
-    var timelineNodes = this.props.timeline.map(function(item) {
+  render() {
+    const timelineNodes = this.props.timeline.map(function(item) {
       return (
         <TimelineItem
           key={item.objectId}
           date={item.date}
           text={item.text} />
-      )
+      );
     });
     return (
       <div>

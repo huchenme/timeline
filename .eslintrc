@@ -1,0 +1,33 @@
+{
+  'parser': 'babel-eslint',
+  'env': {
+    'browser': true,
+    'node': true,
+    'mocha': true,
+    'es6': true,
+  },
+  'globals': {
+  },
+  'rules': {
+    'strict': 0,
+    'quotes': [1, 'single', 'avoid-escape'],
+    'indent': [1, 2],
+    'brace-style': [1, '1tbs'],
+    'eol-last': 1,
+    'no-nested-ternary': 1,
+    'no-underscore-dangle': 0,
+    'padded-blocks': [1, 'never'],
+    'space-after-function-name': [1, 'never'],
+    'space-before-blocks': [1, 'always'],
+    'space-before-function-paren': [1, 'never'],
+    'no-unused-expressions': 0,
+    'no-var': 1,
+    'object-shorthand': [1, 'always']
+  },
+  'plugins': [
+    'react'
+  ],
+  'ecmaFeatures': {
+    'jsx': true
+  }
+}
