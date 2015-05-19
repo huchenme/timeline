@@ -24,10 +24,16 @@ gulp.task('watch:test', function() {
 gulp.task('watch', ['watch:webpack', 'watch:test']);
 
 gulp.task('clean', function() {
-  gulp.src('./public/')
+  gulp.src('./public/*')
     .pipe(plugins.clean({force: true}));
 });
 
 gulp.task('deploy', ['clean'], plugins.shell.task([
-  './node_modules/.bin/webpack -p'
-]));
+  './node_modules/.bin/webpack -p',
+  'git add -A public/*',
+  'git commit -m "pushing production assets"',
+  'git push origin master',
+  'avoscloud -g deploy'
+], {
+  ignoreErrors: true
+}));

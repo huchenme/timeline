@@ -5,12 +5,10 @@
   "author": "Hu Chen",
   "license": "MIT",
   "scripts": {
-    "start": "cd leancloud && avoscloud -P 4567 && cd $OLDPWD",
-    "watch": "BUILD_DEV=1 webpack --watch",
-    "clean": "rm -rf leancloud/public/*",
-    "build": "npm run clean && NODE_ENV=production webpack -p",
-    "deploy": "cd leancloud && avoscloud deploy && cd $OLDPWD",
-    "publish": "cd leancloud && avoscloud publish && cd $OLDPWD"
+    "start": "avoscloud -P 4567",
+    "watch": "gulp watch",
+    "deploy": "gulp deploy",
+    "publish": "avoscloud publish"
   },
   "repository": {
     "type": "git",
