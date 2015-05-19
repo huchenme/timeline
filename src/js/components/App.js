@@ -5,7 +5,7 @@ const TimelineList = require("js/components/TimelineList");
 var timeline = [
   {
     objectId: "5548d3f1e4b03fd83456cdf1",
-    text: "this is *some* markdown 1",
+    text: "this is *some* markdown 2",
     date: "2014-12-31T16:00:00.000Z"
   },
   {
