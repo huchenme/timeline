@@ -22,7 +22,14 @@
     'space-before-function-paren': [1, 'never'],
     'no-unused-expressions': 0,
     'no-var': 1,
-    'object-shorthand': [1, 'always']
+    'no-alert': 0,
+    'object-shorthand': [1, 'always'],
+    'react/prop-types': 1,
+    'react/jsx-no-undef': 2,
+    'react/no-unknown-property': 2,
+    'react/sort-comp': 1,
+    'react/wrap-multilines': 2,
+    'react/self-closing-comp': 1
   },
   'plugins': [
     'react'
