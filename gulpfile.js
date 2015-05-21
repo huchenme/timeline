@@ -1,19 +1,20 @@
 var gulp = require('gulp'),
-  plugins = require('gulp-load-plugins')();
+var del = require('del');
+var $ = require('gulp-load-plugins')();
 
 gulp.task('validate', ['eslint'], function() {
   return gulp.src('test/**/*.js', {read: false})
-    .pipe(plugins.mocha());
+    .pipe($.mocha());
 });
 
 gulp.task('eslint', function() {
   return gulp.src(['src/**/*.js', 'test/**/*.js'])
-    .pipe(plugins.eslint())
-    .pipe(plugins.eslint.format())
-    .pipe(plugins.eslint.failOnError());
+    .pipe($.eslint())
+    .pipe($.eslint.format())
+    .pipe($.eslint.failOnError());
 });
 
-gulp.task('watch:webpack', plugins.shell.task([
+gulp.task('watch:webpack', $.shell.task([
   './node_modules/.bin/webpack --watch'
 ]));
 
@@ -23,12 +24,13 @@ gulp.task('watch:test', function() {
 
 gulp.task('watch', ['watch:webpack', 'watch:test']);
 
-gulp.task('clean', function() {
-  gulp.src('./public/*')
-    .pipe(plugins.clean({force: true}));
+gulp.task('clean', function(cb) {
+  del([
+    'public/**/*'
+  ], cb);
 });
 
-gulp.task('deploy', ['clean'], plugins.shell.task([
+gulp.task('deploy', ['clean'], $.shell.task([
   './node_modules/.bin/webpack -p',
   'git add -A public/*',
   'git commit -m "pushing production assets"',
