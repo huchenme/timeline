@@ -1,15 +1,16 @@
-@import "suitcss-base";
+/*@import "suitcss-base";*/
+@import "variables";
 
 body {
-  font-family: var(--font-family);
-  font-size: var(--font-size);
-  line-height: var(--line-height);
+  font-family: $font-family;
+  font-size: $font-size;
+  line-height: $line-height;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-@import "variables";
+/*@import "variables";*/
 
 /*
 @import "suitcss-utils-align";
