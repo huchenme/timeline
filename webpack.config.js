@@ -1,6 +1,8 @@
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const cssnext = require('cssnext');
+const postcssMixins = require('postcss-mixins');
+const postcssNested = require('postcss-nested');
 
 const definePlugin = new webpack.DefinePlugin({
   __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'false'))
@@ -23,6 +25,8 @@ module.exports = {
     ]
   },
   postcss: [
+    postcssMixins,
+    postcssNested,
     cssnext({
       import: {
         path: ['node_modules', 'src/css']

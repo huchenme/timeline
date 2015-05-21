@@ -485,6 +485,32 @@ ul {
 [tabindex="-1"]:focus {
   outline: none !important;
 }
+
+body {
+  font-family: "Avenir Next", Avenir, "Helvetica Neue", Helvetica, "Lantinghei SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;
+  font-size: 14px;
+  line-height: 1.8;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/**
+ * Breakpoints
+ */
+
+/**
+ * Colors
+ */
+
+/**
+ * Fonts
+ */
+
+/**
+ * Spacing
+ */
+
 /*
 @import "suitcss-utils-align";
 @import "suitcss-utils-display";
@@ -499,7 +525,17 @@ ul {
 @import "suitcss-components-button";
 @import "suitcss-components-flex-embed";
 @import "suitcss-components-grid";
-*/
+*/.tl-TimelineForm-date {}
+.tl-TimelineForm-dateInput {
+    border-color: #0084B4;
+    border-color: rgba(0, 132, 180, .25);
+}
+.tl-TimelineForm-text {}
+.tl-TimelineForm-textInput {
+    border-color: #0084B4;
+    border-color: rgba(0, 132, 180, .25);
+}
+
 /**
  * Breakpoints
  */
@@ -507,17 +543,6 @@ ul {
 /**
  * Colors
  */
-
-:root {
-
-  /* Primary grays */
-
-  /* Primary blues */
-
-  /* Secondary colors */
-
-  /* Secondary color variants */
-}
 
 /**
  * Fonts

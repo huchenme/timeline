@@ -1,4 +1,16 @@
 @import "suitcss-base";
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  line-height: var(--line-height);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@import "variables";
+
 /*
 @import "suitcss-utils-align";
 @import "suitcss-utils-display";
@@ -14,4 +26,3 @@
 @import "suitcss-components-flex-embed";
 @import "suitcss-components-grid";
 */
-@import "variables";

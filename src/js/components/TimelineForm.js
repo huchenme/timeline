@@ -2,6 +2,8 @@ const React = require('react');
 const ReactPropTypes = React.PropTypes;
 const moment = require('moment');
 
+require('css/components/TimelineForm');
+
 const NewTimelineForm = React.createClass({
   propTypes: {
     onFormSubmit: ReactPropTypes.func,
@@ -84,11 +86,24 @@ const NewTimelineForm = React.createClass({
       );
     }
     return (
-      <form onSubmit={this._onSubmit}>
-        <input ref='date' type='text' placeholder='Date' onChange={this._onDateChange} value={this.state.date} />
-        <br />
-        <textarea ref='text' placeholder='Type something...' onChange={this._onTextChange} value={this.state.text} />
-        <br />
+      <form className='tl-TimelineForm' onSubmit={this._onSubmit}>
+        <div className='tl-TimelineForm-date'>
+          <input
+            className='tl-TimelineForm-dateInput'
+            ref='date'
+            type='text'
+            placeholder='日期 YYYY-MM-DD'
+            onChange={this._onDateChange}
+            value={this.state.date} />
+        </div>
+        <div className='tl-TimelineForm-text'>
+          <textarea
+            className='tl-TimelineForm-textInput'
+            ref='text'
+            placeholder='Type something...'
+            onChange={this._onTextChange}
+            value={this.state.text} />
+        </div>
         {buttons}
       </form>
     );

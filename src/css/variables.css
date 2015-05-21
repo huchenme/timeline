@@ -11,46 +11,7 @@
  */
 
 :root {
-  --color-twitter-blue: #55acee;
-  --color-white: #fff;
-
-  /* Primary grays */
-  --color-charcoal: #292f33;
-  --color-dark-gray: #66757f;
-  --color-medium-gray: #8899a6;
-  --color-gray: #ccd6dd;
-  --color-border-gray: #e1e8ed;
-  --color-faint-gray: #f5f8fa;
-
-  /* Primary blues */
-  --color-dark-blue: #226699;
-  --color-deep-blue: #3b88c3;
-  --color-light-blue: #88c9f9;
-
-  /* Secondary colors */
-  --color-orange: #ffac33;
-  --color-green: #77b255;
-  --color-purple: #9266cc;
-  --color-red: #dd2e44;
-  --color-yellow: #ffcc4d;
-
-  /* Secondary color variants */
-  --color-dark-orange: #f4900c;
-  --color-dark-green: #3e721d;
-  --color-dark-purple: #553788;
-  --color-dark-red: #a0041e;
-  --color-deep-green: #5c913b;
-  --color-deep-purple: #744eaa;
-  --color-deep-red: #be1931;
-  --color-light-yellow: #ffd983;
-  --color-light-green: #a6d388;
-  --color-light-purple: #aa8dd8;
-  --color-light-red: #ea596e;
-  --color-faded-yellow: #ffe8b6;
-  --color-faded-green: #c6e5b3;
-  --color-faded-blue: #bbddf5;
-  --color-faded-purple: #cbb7ea;
-  --color-faded-red: #f4abba;
+  --color-light-blue: rgba(0, 132, 180, .25);
 }
 
 /**
@@ -58,9 +19,9 @@
  */
 
 :root {
-  --font-size: 16px;
-  --font-family: sans-serif;
-  --line-height: 1.4;
+  --font-size: 14px;
+  --font-family: "Avenir Next", Avenir, "Helvetica Neue", Helvetica, "Lantinghei SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;
+  --line-height: 1.8;
 }
 
 /**

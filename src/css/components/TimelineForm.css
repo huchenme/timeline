@@ -1,0 +1,16 @@
+.tl-TimelineForm {
+  &-date {
+
+  }
+  &-dateInput {
+    border-color: var(--color-light-blue);
+  }
+  &-text {
+
+  }
+  &-textInput {
+    border-color: var(--color-light-blue);
+  }
+}
+
+@import "variables";
