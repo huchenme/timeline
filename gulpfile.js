@@ -14,8 +14,12 @@ gulp.task('eslint', function() {
     .pipe($.eslint.failOnError());
 });
 
+gulp.task('webpack', $.shell.task([
+  'BUILD_DEV=1 ./node_modules/.bin/webpack'
+]));
+
 gulp.task('watch:webpack', $.shell.task([
-  './node_modules/.bin/webpack --watch'
+  'BUILD_DEV=1 ./node_modules/.bin/webpack --watch'
 ]));
 
 gulp.task('watch:test', function() {

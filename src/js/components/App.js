@@ -16,6 +16,9 @@ const App = React.createClass({
     this.setState({list: newTimeline});
   },
   render() {
+    if (__DEV__) {
+      console.log('js source map');
+    }
     return (
       <div>
         <TimelineForm onFormSubmit={this._onNewTimelineSubmit} />

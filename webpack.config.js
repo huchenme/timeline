@@ -21,6 +21,7 @@ module.exports = {
     filename: 'bundle.js'
   },
   devtool: 'source-map',
+  debug: true,
   resolve: {
     extensions: ['', '.jsx', '.js', '.scss'],
     modulesDirectories: ['src', 'node_modules']
