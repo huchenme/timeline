@@ -1,18 +1,17 @@
+const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const cssnext = require('cssnext');
-const postcssMixins = require('postcss-mixins');
-const postcssNested = require('postcss-nested');
-const path = require('path');
+const autoprefixer = require('autoprefixer');
+const colorRgbaFallback = require('postcss-color-rgba-fallback');
 
 const definePlugin = new webpack.DefinePlugin({
   __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'false'))
 });
 
 const sassLoaders = [
-  'css-loader',
-  'postcss-loader',
-  'sass-loader?&includePaths[]=' + path.resolve(__dirname, './src/css'),
+  'css',
+  'postcss',
+  'sass?&includePaths[]=' + path.resolve(__dirname, './src/css'),
 ];
 
 module.exports = {
@@ -31,15 +30,10 @@ module.exports = {
       { test: /\.scss$/, loader: ExtractTextPlugin.extract('style', sassLoaders.join('!')) }
     ]
   },
-  // postcss: [
-  //   postcssMixins,
-  //   postcssNested,
-  //   cssnext({
-  //     import: {
-  //       path: ['node_modules', 'src/css']
-  //     }
-  //   })
-  // ],
+  postcss: [
+    autoprefixer(),
+    colorRgbaFallback()
+  ],
   plugins: [
     definePlugin,
     new ExtractTextPlugin('bundle.css')

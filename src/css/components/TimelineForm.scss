@@ -2,7 +2,7 @@
 
 .tl-TimelineForm {
   &-date {
-
+    display: flex;
   }
   &-dateInput {
     border-color: $color-light-blue;
