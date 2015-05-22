@@ -19,6 +19,7 @@ const App = require('js/components/App');
 //   });
 // }
 
+require('normalize.css');
 require('css/base');
 
 React.render(<App />, document.getElementById('main'));

@@ -11,7 +11,7 @@ const definePlugin = new webpack.DefinePlugin({
 const sassLoaders = [
   'css',
   'postcss',
-  'sass?&includePaths[]=' + path.resolve(__dirname, './src/css'),
+  'sass?&includePaths[]=' + path.resolve(__dirname, './src/css')
 ];
 
 module.exports = {
@@ -27,7 +27,8 @@ module.exports = {
   module: {
     loaders: [
       { test: /\.jsx?$/, loader: 'babel', exclude: /node_modules/ },
-      { test: /\.scss$/, loader: ExtractTextPlugin.extract('style', sassLoaders.join('!')) }
+      { test: /\.scss$/, loader: ExtractTextPlugin.extract('style', sassLoaders.join('!')) },
+      { test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css!postcss') }
     ]
   },
   postcss: [
