@@ -9,9 +9,9 @@ const definePlugin = new webpack.DefinePlugin({
 });
 
 const sassLoaders = [
-  'css',
+  'css?sourceMap',
   'postcss',
-  'sass?&includePaths[]=' + path.resolve(__dirname, './src/css')
+  'sass?includePaths[]=' + path.resolve(__dirname, './src/css')
 ];
 
 module.exports = {
@@ -20,6 +20,7 @@ module.exports = {
     path: './public',
     filename: 'bundle.js'
   },
+  devtool: 'source-map',
   resolve: {
     extensions: ['', '.jsx', '.js', '.scss'],
     modulesDirectories: ['src', 'node_modules']
@@ -28,7 +29,7 @@ module.exports = {
     loaders: [
       { test: /\.jsx?$/, loader: 'babel', exclude: /node_modules/ },
       { test: /\.scss$/, loader: ExtractTextPlugin.extract('style', sassLoaders.join('!')) },
-      { test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css!postcss') }
+      { test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss') }
     ]
   },
   postcss: [
