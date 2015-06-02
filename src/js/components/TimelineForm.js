@@ -24,7 +24,6 @@ const NewTimelineForm = React.createClass({
   },
   _onSubmit(e) {
     e.preventDefault();
-    const id = (new Date() + Math.floor(Math.random() * 999999)).toString(36);
     let dateError, textError;
     if(this.state.text.trim() === '') {
       textError = 'empty text';
@@ -47,7 +46,7 @@ const NewTimelineForm = React.createClass({
     });
     if(dateError === null && textError === null) {
       const objectDate = moment(this.state.date).toDate();
-      this.props.onFormSubmit({objectId: id, date: objectDate, text: this.state.text});
+      this.props.onFormSubmit({date: objectDate, text: this.state.text});
       this.setState({
         date: '',
         text: ''
