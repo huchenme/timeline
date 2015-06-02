@@ -1,3 +1,4 @@
+/*global __DEV__*/
 const React = require('react');
 const TimelineForm = require('js/components/TimelineForm');
 const TimelineList = require('js/components/TimelineList');

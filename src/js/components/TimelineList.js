@@ -6,7 +6,7 @@ const AppConstants = require('js/constants/AppConstants');
 
 const TimelineList = React.createClass({
   propTypes: {
-    list: ReactPropTypes.array.isRequired
+    list: ReactPropTypes.object.isRequired
   },
   getInitialState() {
     return {
@@ -14,13 +14,10 @@ const TimelineList = React.createClass({
     };
   },
   render() {
-    const timelineNodes = this.props.list.map(function(item) {
-      return (
-        <TimelineItem
-          key={item.objectId}
-          item={item} />
-      );
-    });
+    let timelineNodes = [];
+    for (const key in this.props.list) {
+      timelineNodes.push(<TimelineItem key={key} item={this.props.list[key]} />);
+    }
     return (
       <div>
         <TimelineTabs activeTab={this.state.activeTab} />
