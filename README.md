@@ -25,6 +25,13 @@
 
 本 Repo 是结合 LeanCloud 的 Web Hosting，不过不需要的话，可以考虑参考另一个自带 live reload 的 Repo https://github.com/huchenme/react-hot-postcss-boilerplate
 
+## 任务表
+
+- [x] @mentions, #refs, [links](), **formatting**, and <del>tags</del> supported
+- [x] list syntax required (any unordered or ordered list supported)
+- [x] this is a complete item
+- [ ] this is an incomplete item
+
 ## Bug
 
 请开新的 issue，或者提交 pull request
