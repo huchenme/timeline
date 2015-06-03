@@ -3,10 +3,11 @@ const ReactPropTypes = React.PropTypes;
 const TimelineItem = require('js/components/TimelineItem');
 const TimelineTabs = require('js/components/TimelineTabs');
 const AppConstants = require('js/constants/AppConstants');
+const _ = require('underscore');
 
 const TimelineList = React.createClass({
   propTypes: {
-    list: ReactPropTypes.object.isRequired
+    list: ReactPropTypes.array.isRequired
   },
   getInitialState() {
     return {
@@ -14,10 +15,15 @@ const TimelineList = React.createClass({
     };
   },
   render() {
-    let timelineNodes = [];
-    for (const key in this.props.list) {
-      timelineNodes.push(<TimelineItem key={key} item={this.props.list[key]} />);
-    }
+    let sortedList = _.sortBy(this.props.list, function(item) {
+      return item.date.getTime();
+    });
+    console.log(sortedList);
+    const timelineNodes = sortedList.map(function(item) {
+      return (
+        <TimelineItem key={item.objectId} item={item} />
+      );
+    });
     return (
       <div>
         <TimelineTabs activeTab={this.state.activeTab} />

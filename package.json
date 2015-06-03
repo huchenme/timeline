@@ -63,7 +63,8 @@
     "suitcss-utils-offset": "latest",
     "suitcss-utils-position": "latest",
     "suitcss-utils-size": "latest",
-    "suitcss-utils-text": "latest"
+    "suitcss-utils-text": "latest",
+    "underscore": "^1.8.3"
   },
   "dependencies": {}
 }

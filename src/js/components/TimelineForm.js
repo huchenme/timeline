@@ -46,7 +46,11 @@ const NewTimelineForm = React.createClass({
     });
     if(dateError === null && textError === null) {
       const objectDate = moment(this.state.date).toDate();
-      this.props.onFormSubmit({date: objectDate, text: this.state.text});
+      let objectId;
+      if (this.props.item) {
+        objectId = this.props.item.objectId;
+      }
+      this.props.onFormSubmit({objectId: objectId, date: objectDate, text: this.state.text});
       this.setState({
         date: '',
         text: ''
