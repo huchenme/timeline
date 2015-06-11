@@ -23,6 +23,7 @@
     'no-unused-expressions': 0,
     'no-var': 1,
     'no-alert': 0,
+    'no-unused-vars': 1,
     'object-shorthand': [1, 'methods'],
     'react/prop-types': 1,
     'react/jsx-no-undef': 2,
@@ -35,6 +36,7 @@
     'react'
   ],
   'ecmaFeatures': {
-    'jsx': true
+    'jsx': true,
+    'ecmascript': 6
   }
 }

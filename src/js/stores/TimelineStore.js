@@ -1,7 +1,6 @@
 const Fluxxor = require('fluxxor');
 const constants = require('js/constants/AppConstants');
 const timelineData = require('data/timelines');
-const assign = require('object-assign');
 
 const TimelineStore = Fluxxor.createStore({
   initialize() {
@@ -21,7 +20,7 @@ const TimelineStore = Fluxxor.createStore({
       date: payload.date,
       text: payload.text
     };
-    this.timelines[id] = item;
+    this.timelines.push(item);
     this.emit('change');
   },
 
@@ -30,9 +29,13 @@ const TimelineStore = Fluxxor.createStore({
     this.emit('change');
   },
 
-  onUpdateTimeline(payload) {
-    this.timelines[payload.id] = assign({}, this.timelines[payload.id], payload.updates);
+  onUpdateTimeline() {
+    // this.timelines[payload.id] = assign({}, this.timelines[payload.id], payload.updates);
     this.emit('change');
+  },
+
+  getItems() {
+    return this.timelines;
   },
 
   _nextTimelineId() {

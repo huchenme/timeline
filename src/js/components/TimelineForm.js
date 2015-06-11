@@ -14,6 +14,8 @@ const NewTimelineForm = React.createClass({
     let date = '';
     if (this.props.item && this.props.item.date) {
       date = moment(this.props.item.date).format('YYYY-MM-DD');
+    } else {
+      date = moment().format('YYYY-MM-DD');
     }
     return {
       date: date,

@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const colorRgbaFallback = require('postcss-color-rgba-fallback');
+const WebpackNotifierPlugin = require('webpack-notifier');
 
 const definePlugin = new webpack.DefinePlugin({
   __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'false'))
@@ -39,6 +40,7 @@ module.exports = {
   ],
   plugins: [
     definePlugin,
+    new WebpackNotifierPlugin(),
     new ExtractTextPlugin('bundle.css')
   ]
 };

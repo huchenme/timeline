@@ -1,14 +1,16 @@
-var gulp = require('gulp');
-var del = require('del');
-var $ = require('gulp-load-plugins')();
+const gulp = require('gulp');
+const del = require('del');
+const $ = require('gulp-load-plugins')();
 
-gulp.task('validate', ['eslint'], function() {
+const lintFiles = ['src/**/*.js', 'test/**/*.js', '.gulpfile.js'];
+
+gulp.task('test', ['eslint'], function() {
   return gulp.src('test/**/*.js', {read: false})
     .pipe($.mocha());
 });
 
 gulp.task('eslint', function() {
-  return gulp.src(['src/**/*.js', 'test/**/*.js'])
+  return gulp.src(lintFiles)
     .pipe($.eslint())
     .pipe($.eslint.format())
     .pipe($.eslint.failOnError());
@@ -23,14 +25,14 @@ gulp.task('watch:webpack', $.shell.task([
 ]));
 
 gulp.task('watch:test', function() {
-  gulp.watch(['src/**/*.js', 'test/**/*.js'], ['validate']);
+  gulp.watch(lintFiles, ['test']);
 });
 
-gulp.task('watch', ['watch:webpack', 'watch:test']);
+gulp.task('watch', ['test', 'watch:webpack', 'watch:test']);
 
 gulp.task('clean', function(cb) {
   del([
-    'public/**/*'
+    'public/**/*', '!public/favicon.ico'
   ], cb);
 });
 

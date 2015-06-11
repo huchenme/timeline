@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/huchenme/timeline",
   "devDependencies": {
+    "alt": "^0.16.10",
     "autoprefixer": "^5.1.1",
     "babel-eslint": "^3.1.5",
     "babel-loader": "^5.0.0",
@@ -34,12 +35,12 @@
     "eslint": "^0.21.2",
     "eslint-plugin-react": "^2.3.0",
     "extract-text-webpack-plugin": "^0.7.0",
-    "fluxxor": "^1.5.3",
     "gulp": "^3.8.11",
     "gulp-eslint": "^0.12.0",
     "gulp-load-plugins": "^0.10.0",
     "gulp-mocha": "^2.0.1",
     "gulp-shell": "^0.4.1",
+    "immutable": "^3.7.3",
     "keymirror": "^0.1.1",
     "marked": "^0.3.3",
     "moment": "^2.10.2",
@@ -64,7 +65,8 @@
     "suitcss-utils-position": "latest",
     "suitcss-utils-size": "latest",
     "suitcss-utils-text": "latest",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "webpack-notifier": "^1.2.1"
   },
   "dependencies": {}
 }
