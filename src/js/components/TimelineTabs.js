@@ -1,10 +1,10 @@
-const React = require('react');
-const ReactPropTypes = React.PropTypes;
+import React, {PropTypes} from 'react';
 
-const TimelineTabs = React.createClass({
+export default React.createClass({
   propTypes: {
-    activeTab: ReactPropTypes.string.isRequired
+    activeTab: PropTypes.string.isRequired
   },
+
   render() {
     return (
       <div>
@@ -13,5 +13,3 @@ const TimelineTabs = React.createClass({
     );
   }
 });
-
-module.exports = TimelineTabs;

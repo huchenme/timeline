@@ -2,7 +2,7 @@ const gulp = require('gulp');
 const del = require('del');
 const $ = require('gulp-load-plugins')();
 
-const lintFiles = ['src/**/*.js', 'test/**/*.js', '.gulpfile.js'];
+const lintFiles = ['src/**/*.js', 'test/**/*.js', 'gulpfile.js'];
 
 gulp.task('test', ['eslint'], function() {
   return gulp.src('test/**/*.js', {read: false})
@@ -20,9 +20,9 @@ gulp.task('webpack', $.shell.task([
   'BUILD_DEV=1 ./node_modules/.bin/webpack'
 ]));
 
-gulp.task('watch:webpack', $.shell.task([
-  'BUILD_DEV=1 ./node_modules/.bin/webpack --watch'
-]));
+gulp.task('watch:webpack', function() {
+  gulp.watch(['src/**/*.js'], ['webpack']);
+});
 
 gulp.task('watch:test', function() {
   gulp.watch(lintFiles, ['test']);

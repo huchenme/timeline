@@ -1,15 +1,15 @@
-const React = require('react');
-const ReactPropTypes = React.PropTypes;
-const moment = require('moment');
+import React, {PropTypes} from 'react';
+import moment from 'moment';
 
 require('css/components/TimelineForm');
 
-const NewTimelineForm = React.createClass({
+export default React.createClass({
   propTypes: {
-    onFormSubmit: ReactPropTypes.func,
-    onFormCancel: ReactPropTypes.func,
-    item: ReactPropTypes.object
+    onFormSubmit: PropTypes.func,
+    onFormCancel: PropTypes.func,
+    item: PropTypes.object
   },
+
   getInitialState() {
     let date = '';
     if (this.props.item && this.props.item.date) {
@@ -24,6 +24,7 @@ const NewTimelineForm = React.createClass({
       textError: null
     };
   },
+
   _onSubmit(e) {
     e.preventDefault();
     let dateError, textError;
@@ -59,23 +60,28 @@ const NewTimelineForm = React.createClass({
       });
     }
   },
+
   _isValidDate(text) {
     return /^\d{4}-\d{2}-\d{2}$/.test(text) && moment(text).isValid();
   },
+
   _onDateChange(e) {
     this.setState({
       date: e.target.value
     });
   },
+
   _onTextChange(e) {
     this.setState({
       text: e.target.value
     });
   },
+
   _onCancelClick(e) {
     e.preventDefault();
     this.props.onFormCancel();
   },
+
   render() {
     let buttons;
     if (this.props.item) {
@@ -114,5 +120,3 @@ const NewTimelineForm = React.createClass({
     );
   }
 });
-
-module.exports = NewTimelineForm;

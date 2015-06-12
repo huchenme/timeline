@@ -1,23 +1,25 @@
-const React = require('react');
-const ReactPropTypes = React.PropTypes;
-const TimelineForm = require('js/components/TimelineForm');
-const moment = require('moment');
-const marked = require('marked');
+import React, {PropTypes} from 'react';
+import TimelineForm from 'js/components/TimelineForm';
+import moment from 'moment';
+import marked from 'marked';
 
-const TimelineItem = React.createClass({
+export default React.createClass({
   propTypes: {
-    item: ReactPropTypes.object.isRequired
+    item: PropTypes.object.isRequired
   },
+
   getInitialState() {
     return {
       isEditing: false
     };
   },
+
   _onClickEdit(e) {
     e.preventDefault();
     console.log('edit');
     this.setState({isEditing: true});
   },
+
   _onClickDelete(e) {
     e.preventDefault();
     console.log('delete');
@@ -25,13 +27,16 @@ const TimelineItem = React.createClass({
       console.log('deleted');
     }
   },
+
   _onSave(item) {
     console.log(item);
     this.setState({isEditing: false});
   },
+
   _onCancel() {
     this.setState({isEditing: false});
   },
+
   render() {
     const rawMarkup = marked(this.props.item.text, {sanitize: true});
     let input, item;
@@ -60,5 +65,3 @@ const TimelineItem = React.createClass({
     );
   }
 });
-
-module.exports = TimelineItem;

@@ -1,15 +1,16 @@
-const Fluxxor = require('fluxxor');
-const constants = require('js/constants/AppConstants');
-const timelineData = require('data/timelines');
+import Fluxxor from 'fluxxor';
+import {Actions} from 'js/constants/AppConstants';
+import timelineData from 'data/timelines';
+import {OrderedMap} from 'immutable';
 
 const TimelineStore = Fluxxor.createStore({
   initialize() {
-    this.timelines = timelineData;
+    this.timelines = OrderedMap(timelineData);
 
     this.bindActions(
-      constants.actions.ADD_TIMELINE, this.onAddTimeline,
-      constants.actions.DELETE_TIMELINE, this.onDeleteTimeline,
-      constants.actions.UPDATE_TIMELINE, this.onUpdateTimeline
+      Actions.ADD_TIMELINE, this.onAddTimeline,
+      Actions.DELETE_TIMELINE, this.onDeleteTimeline,
+      Actions.UPDATE_TIMELINE, this.onUpdateTimeline
     );
   },
 
@@ -20,22 +21,22 @@ const TimelineStore = Fluxxor.createStore({
       date: payload.date,
       text: payload.text
     };
-    this.timelines.push(item);
+    this.timelines = this.timelines.set(id, item);
     this.emit('change');
   },
 
   onDeleteTimeline(payload) {
-    delete this.timelines[payload.id];
+    this.timelines = this.timelines.remove(payload.id);
     this.emit('change');
   },
 
-  onUpdateTimeline() {
-    // this.timelines[payload.id] = assign({}, this.timelines[payload.id], payload.updates);
+  onUpdateTimeline(payload) {
+    this.timelines = this.timelines.set(payload.id, payload.item);
     this.emit('change');
   },
 
   getItems() {
-    return this.timelines;
+    return this.timelines.sortBy(item => item.date.getTime());
   },
 
   _nextTimelineId() {

@@ -1,25 +1,23 @@
-/*global __DEV__*/
-const React = require('react');
-const TimelineForm = require('js/components/TimelineForm');
-const TimelineList = require('js/components/TimelineList');
+import React from 'react';
+import TimelineForm from 'js/components/TimelineForm';
+import TimelineList from 'js/components/TimelineList';
 
 const timelineData = require('data/timelines');
 
-const App = React.createClass({
+export default React.createClass({
   getInitialState() {
     return {
       list: timelineData
     };
   },
+
   _onNewTimelineSubmit(item) {
     const oldTimeline = this.state.list;
     const newTimeline = oldTimeline.concat([item]);
     this.setState({list: newTimeline});
   },
+
   render() {
-    if (__DEV__) {
-      console.log('js source map');
-    }
     return (
       <div>
         <TimelineForm onFormSubmit={this._onNewTimelineSubmit} />
@@ -29,5 +27,3 @@ const App = React.createClass({
     );
   }
 });
-
-module.exports = App;

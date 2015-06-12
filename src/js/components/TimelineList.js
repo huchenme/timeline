@@ -1,36 +1,27 @@
-const React = require('react');
-const ReactPropTypes = React.PropTypes;
-const TimelineItem = require('js/components/TimelineItem');
-const TimelineTabs = require('js/components/TimelineTabs');
-const AppConstants = require('js/constants/AppConstants');
-const _ = require('underscore');
+import React, {PropTypes} from 'react';
+import TimelineItem from 'js/components/TimelineItem';
+import TimelineTabs from 'js/components/TimelineTabs';
+import {Tabs} from 'js/constants/AppConstants';
 
-const TimelineList = React.createClass({
+export default React.createClass({
   propTypes: {
-    list: ReactPropTypes.array.isRequired
+    list: PropTypes.array.isRequired
   },
+
   getInitialState() {
     return {
-      activeTab: AppConstants.tabs.ALL
+      activeTab: Tabs.ALL
     };
   },
+
   render() {
-    let sortedList = _.sortBy(this.props.list, function(item) {
-      return item.date.getTime();
-    });
-    console.log(sortedList);
-    const timelineNodes = sortedList.map(function(item) {
-      return (
-        <TimelineItem key={item.objectId} item={item} />
-      );
-    });
     return (
       <div>
         <TimelineTabs activeTab={this.state.activeTab} />
-        {timelineNodes}
+        {this.props.list.map( item =>
+          <TimelineItem key={item.objectId} item={item} />
+        )}
       </div>
     );
   }
 });
-
-module.exports = TimelineList;

@@ -1,6 +1,6 @@
 const moment = require('moment');
 
-module.exports = [
+export default [
   {
     objectId: '5548d3f1e4b03fd83456cdf1',
     text: 'this is *some* markdown 2',

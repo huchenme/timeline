@@ -29,7 +29,11 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.jsx?$/, loader: 'babel', exclude: /node_modules/ },
+      { test:
+        /\.jsx?$/,
+        loader: 'babel',
+        exclude: /node_modules/
+      },
       { test: /\.scss$/, loader: ExtractTextPlugin.extract('style', sassLoaders.join('!')) },
       { test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss') }
     ]
