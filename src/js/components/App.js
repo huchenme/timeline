@@ -1,13 +1,16 @@
 import React from 'react';
 import TimelineForm from 'js/components/TimelineForm';
 import TimelineList from 'js/components/TimelineList';
-
-const timelineData = require('data/timelines');
+import Fluxxor, {StoreWatchMixin} from 'fluxxor';
+const FluxMixin = Fluxxor.FluxMixin(React);
 
 export default React.createClass({
-  getInitialState() {
+  mixins: [FluxMixin, StoreWatchMixin('TimelineStore')],
+
+  getStateFromFlux() {
+    const flux = this.getFlux();
     return {
-      list: timelineData
+      list: flux.store('TimelineStore').getItems()
     };
   },
 
