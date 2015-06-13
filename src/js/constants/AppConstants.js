@@ -1,12 +1,14 @@
-const Tabs = {
+const TABS = {
   ALL: 'ALL',
   HIGHTLIGHT: 'HIGHTLIGHT'
 };
 
-const Actions = {
+const ACTIONS = {
   ADD_TIMELINE: 'ADD_TIMELINE',
   DELETE_TIMELINE: 'DELETE_TIMELINE',
   UPDATE_TIMELINE: 'UPDATE_TIMELINE'
 };
 
-export {Tabs, Actions};
+const CHANGE = 'CHANGE';
+
+export {TABS, ACTIONS, CHANGE};

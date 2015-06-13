@@ -1,26 +1,29 @@
 import React, {PropTypes} from 'react';
+import {OrderedMap} from 'immutable';
+
 import TimelineItem from 'js/components/TimelineItem';
 import TimelineTabs from 'js/components/TimelineTabs';
-import {Tabs} from 'js/constants/AppConstants';
+import {TABS} from 'js/constants/AppConstants';
 
 export default React.createClass({
   propTypes: {
-    list: PropTypes.array.isRequired
+    list: PropTypes.instanceOf(OrderedMap).isRequired
   },
 
   getInitialState() {
     return {
-      activeTab: Tabs.ALL
+      activeTab: TABS.ALL
     };
   },
 
   render() {
+    const list = this.props.list;
     return (
       <div>
         <TimelineTabs activeTab={this.state.activeTab} />
-        {this.props.list.map( item =>
-          <TimelineItem key={item.objectId} item={item} />
-        )}
+        {list.keySeq().map((key) => {
+          (<TimelineItem key={key} id={key} item={list.get(key)} />);
+        })}
       </div>
     );
   }

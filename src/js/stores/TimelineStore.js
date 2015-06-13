@@ -1,47 +1,65 @@
-import Fluxxor from 'fluxxor';
-import {Actions} from 'js/constants/AppConstants';
+import {OrderedMap, Map} from 'immutable';
+import {EventEmitter} from 'events';
+import assign from 'object-assign';
+import moment from 'moment';
+
+import {ACTIONS, CHANGE} from 'js/constants/AppConstants';
+import AppDispatcher from 'js/dispatcher/AppDispatcher';
 import timelineData from 'data/timelines';
-import {OrderedMap} from 'immutable';
 
-const TimelineStore = Fluxxor.createStore({
-  initialize() {
-    this.timelines = OrderedMap(timelineData);
+let _timelines = getTimelineList(timelineData);
 
-    this.bindActions(
-      Actions.ADD_TIMELINE, this.onAddTimeline,
-      Actions.DELETE_TIMELINE, this.onDeleteTimeline,
-      Actions.UPDATE_TIMELINE, this.onUpdateTimeline
-    );
+function getTimelineList(json) {
+  let list = OrderedMap();
+  json.forEach(item => {
+    list = list.set(item.objectId, Map({ date: moment(item.date), text: item.text }));
+  });
+  console.log('test');
+  return list;
+}
+
+const TimelineStore = assign({}, EventEmitter.prototype, {
+  emitChange() {
+    this.emit(CHANGE);
   },
 
-  onAddTimeline(payload) {
-    const id = this._nextTimelineId();
-    const item = {
-      objectId: id,
-      date: payload.date,
-      text: payload.text
-    };
-    this.timelines = this.timelines.set(id, item);
-    this.emit('change');
+  addChangeListener(callback) {
+    this.on(CHANGE, callback);
   },
 
-  onDeleteTimeline(payload) {
-    this.timelines = this.timelines.remove(payload.id);
-    this.emit('change');
+  removeChangeListener(callback) {
+    this.removeListener(CHANGE, callback);
   },
 
-  onUpdateTimeline(payload) {
-    this.timelines = this.timelines.set(payload.id, payload.item);
-    this.emit('change');
+  getAllItems() {
+    return _timelines;
+    // .sortBy(item => item.get('date').unix())
   },
 
-  getItems() {
-    return this.timelines.sortBy(item => item.date.getTime());
-  },
-
-  _nextTimelineId() {
+  nextTimelineId() {
     return (new Date() + Math.floor(Math.random() * 999999)).toString(36);
   }
 });
 
-module.exports = TimelineStore;
+AppDispatcher.register(action => {
+  switch(action.actionType) {
+    case ACTIONS.ADD_TIMELINE:
+      const id = TimelineStore.nextTimelineId();
+      _timelines = _timelines.set(id, action.item);
+      break;
+
+    case ACTIONS.UPDATE_TIMELINE:
+      _timelines = _timelines.set(action.id, action.item);
+      break;
+
+    case ACTIONS.DELETE_TIMELINE:
+      _timelines = _timelines.remove(action.id);
+      break;
+
+    default:
+  }
+
+  TimelineStore.emitChange();
+});
+
+export default TimelineStore;

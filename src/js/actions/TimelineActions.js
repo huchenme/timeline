@@ -1,16 +1,26 @@
-import {Actions} from 'js/constants/AppConstants';
+import {ACTIONS} from 'js/constants/AppConstants';
+import AppDispatcher from 'js/dispatcher/AppDispatcher';
 
 export default {
   addItem(item) {
-    this.dispatch(Actions.ADD_TIMELINE, {item});
+    AppDispatcher.dispatch({
+      actionType: ACTIONS.ADD_TIMELINE,
+      item: item
+    });
   },
 
   updateItem(id, item) {
-    this.dispatch(Actions.UPDATE_TIMELINE, {id, item});
+    AppDispatcher.dispatch({
+      actionType: ACTIONS.UPDATE_TIMELINE,
+      id: id,
+      item: item
+    });
   },
 
   deleteItem(id) {
-    this.dispatch(Actions.DELETE_TIMELINE, {id});
+    AppDispatcher.dispatch({
+      actionType: ACTIONS.DELETE_TIMELINE,
+      id: id
+    });
   }
 };
-

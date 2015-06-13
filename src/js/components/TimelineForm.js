@@ -1,25 +1,26 @@
 import React, {PropTypes} from 'react';
 import moment from 'moment';
+import {Map} from 'immutable';
 
 require('css/components/TimelineForm');
 
 export default React.createClass({
   propTypes: {
-    onFormSubmit: PropTypes.func,
+    onFormSubmit: PropTypes.func.isRequired,
     onFormCancel: PropTypes.func,
-    item: PropTypes.object
+    item: PropTypes.instanceOf(Map)
   },
 
   getInitialState() {
     let date = '';
-    if (this.props.item && this.props.item.date) {
-      date = moment(this.props.item.date).format('YYYY-MM-DD');
+    if (this.props.item && this.props.item.get('date')) {
+      date = this.props.item.get('date').format('YYYY-MM-DD');
     } else {
       date = moment().format('YYYY-MM-DD');
     }
     return {
       date: date,
-      text: (this.props.item && this.props.item.text) || '',
+      text: (this.props.item && this.props.item.get('text')) || '',
       dateError: null,
       textError: null
     };
@@ -48,12 +49,8 @@ export default React.createClass({
       textError: textError
     });
     if(dateError === null && textError === null) {
-      const objectDate = moment(this.state.date).toDate();
-      let objectId;
-      if (this.props.item) {
-        objectId = this.props.item.objectId;
-      }
-      this.props.onFormSubmit({objectId: objectId, date: objectDate, text: this.state.text});
+      const objectDate = moment(this.state.date);
+      this.props.onFormSubmit(Map({date: objectDate, text: this.state.text}));
       this.setState({
         date: '',
         text: ''
@@ -66,15 +63,11 @@ export default React.createClass({
   },
 
   _onDateChange(e) {
-    this.setState({
-      date: e.target.value
-    });
+    this.setState({date: e.target.value});
   },
 
   _onTextChange(e) {
-    this.setState({
-      text: e.target.value
-    });
+    this.setState({text: e.target.value});
   },
 
   _onCancelClick(e) {

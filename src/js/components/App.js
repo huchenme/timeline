@@ -1,23 +1,35 @@
 import React from 'react';
+
 import TimelineForm from 'js/components/TimelineForm';
 import TimelineList from 'js/components/TimelineList';
-import Fluxxor, {StoreWatchMixin} from 'fluxxor';
-const FluxMixin = Fluxxor.FluxMixin(React);
+import TimelineStore from 'js/stores/TimelineStore';
+import TimelineActions from 'js/actions/TimelineActions';
+
+function getState() {
+  return {
+    list: TimelineStore.getAllItems()
+  };
+}
 
 export default React.createClass({
-  mixins: [FluxMixin, StoreWatchMixin('TimelineStore')],
+  getInitialState() {
+    return getState();
+  },
 
-  getStateFromFlux() {
-    const flux = this.getFlux();
-    return {
-      list: flux.store('TimelineStore').getItems()
-    };
+  componentDidMount() {
+    TimelineStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount() {
+    TimelineStore.removeChangeListener(this._onChange);
+  },
+
+  _onChange() {
+    this.setState(getState());
   },
 
   _onNewTimelineSubmit(item) {
-    const oldTimeline = this.state.list;
-    const newTimeline = oldTimeline.concat([item]);
-    this.setState({list: newTimeline});
+    TimelineActions.addItem(item);
   },
 
   render() {

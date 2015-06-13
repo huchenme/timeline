@@ -1,11 +1,15 @@
 import React, {PropTypes} from 'react';
-import TimelineForm from 'js/components/TimelineForm';
+import {Map} from 'immutable';
 import moment from 'moment';
 import marked from 'marked';
 
+import TimelineForm from 'js/components/TimelineForm';
+import TimelineActions from 'js/actions/TimelineActions';
+
 export default React.createClass({
   propTypes: {
-    item: PropTypes.object.isRequired
+    id: PropTypes.string.isRequired,
+    item: PropTypes.instanceOf(Map).isRequired
   },
 
   getInitialState() {
@@ -25,11 +29,13 @@ export default React.createClass({
     console.log('delete');
     if (confirm('Are you sure?')) {
       console.log('deleted');
+      TimelineActions.deleteItem(this.props.id);
     }
   },
 
   _onSave(item) {
-    console.log(item);
+    console.log(this.props.id, item);
+    TimelineActions.updateItem(this.props.id, item);
     this.setState({isEditing: false});
   },
 
@@ -38,19 +44,20 @@ export default React.createClass({
   },
 
   render() {
-    const rawMarkup = marked(this.props.item.text, {sanitize: true});
-    let input, item;
+    let item = this.props.item;
+    const rawMarkup = marked(item.get('text'), {sanitize: true});
+    let inputNode, itemNode;
     if (this.state.isEditing) {
-      input = (
+      inputNode = (
         <TimelineForm
           onFormSubmit={this._onSave}
           onFormCancel={this._onCancel}
-          item={this.props.item} />
+          item={item} />
       );
     } else {
-      item = (
+      itemNode = (
         <div>
-          <p>{moment(this.props.item.date).format('YYYY 年 M 月 D 日')}</p>
+          <p>{moment(item.get('date')).format('YYYY 年 M 月 D 日')}</p>
           <div dangerouslySetInnerHTML={{__html: rawMarkup}} />
           <a href='#' onClick={this._onClickEdit}>Edit</a>
           <a href='#' onClick={this._onClickDelete}>Delete</a>
@@ -59,8 +66,8 @@ export default React.createClass({
     }
     return (
       <div>
-        {input}
-        {item}
+        {inputNode}
+        {itemNode}
       </div>
     );
   }
