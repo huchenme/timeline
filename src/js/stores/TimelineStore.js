@@ -32,8 +32,7 @@ const TimelineStore = assign({}, EventEmitter.prototype, {
   },
 
   getAllItems() {
-    return _timelines;
-    // .sortBy(item => item.get('date').unix())
+    return _timelines.sortBy(item => item.get('date').unix());
   },
 
   nextTimelineId() {

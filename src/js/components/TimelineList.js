@@ -21,9 +21,9 @@ export default React.createClass({
     return (
       <div>
         <TimelineTabs activeTab={this.state.activeTab} />
-        {list.keySeq().map((key) => {
-          (<TimelineItem key={key} id={key} item={list.get(key)} />);
-        })}
+        {list.map((value, key) =>
+          <TimelineItem key={key} id={key} item={value} />
+        )}
       </div>
     );
   }
