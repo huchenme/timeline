@@ -4,11 +4,6 @@ const $ = require('gulp-load-plugins')();
 
 const lintFiles = ['src/**/*.js', 'test/**/*.js', 'gulpfile.js'];
 
-gulp.task('test', ['eslint'], function() {
-  return gulp.src('test/**/*.js', {read: false})
-    .pipe($.mocha());
-});
-
 gulp.task('eslint', function() {
   return gulp.src(lintFiles)
     .pipe($.eslint())
@@ -20,15 +15,15 @@ gulp.task('webpack', $.shell.task([
   'BUILD_DEV=1 ./node_modules/.bin/webpack'
 ]));
 
-gulp.task('watch:webpack', function() {
-  gulp.watch(['src/**/*.js'], ['webpack']);
+gulp.task('watch:webpack', $.shell.task([
+  'BUILD_DEV=1 ./node_modules/.bin/webpack --watch --progress --color'
+]));
+
+gulp.task('watch:lint', function() {
+  gulp.watch(lintFiles, ['eslint']);
 });
 
-gulp.task('watch:test', function() {
-  gulp.watch(lintFiles, ['test']);
-});
-
-gulp.task('watch', ['test', 'watch:webpack', 'watch:test']);
+gulp.task('watch', ['eslint', 'watch:lint']);
 
 gulp.task('clean', function(cb) {
   del([
@@ -45,3 +40,5 @@ gulp.task('deploy', ['clean'], $.shell.task([
 ], {
   ignoreErrors: true
 }));
+
+gulp.task('default', ['eslint', 'webpack']);

@@ -59,6 +59,7 @@ export default React.createClass({
         <div>
           <p>{moment(item.get('date')).format('YYYY 年 M 月 D 日')}</p>
           <div dangerouslySetInnerHTML={{__html: rawMarkup}} />
+          <p>Featured: {item.get('featured') ? 'true' : 'false'}</p>
           <a href='#' onClick={this._onClickEdit}>Edit</a>
           <a href='#' onClick={this._onClickDelete}>Delete</a>
         </div>

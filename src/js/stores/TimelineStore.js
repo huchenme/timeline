@@ -1,3 +1,4 @@
+/* global __DEV__ */
 import {OrderedMap, Map} from 'immutable';
 import {EventEmitter} from 'events';
 import assign from 'object-assign';
@@ -12,9 +13,12 @@ let _timelines = getTimelineList(timelineData);
 function getTimelineList(json) {
   let list = OrderedMap();
   json.forEach(item => {
-    list = list.set(item.objectId, Map({ date: moment(item.date), text: item.text }));
+    list = list.set(item.objectId, Map({
+      date: moment(item.date),
+      text: item.text,
+      featured: item.featured
+    }));
   });
-  console.log('test');
   return list;
 }
 
@@ -44,14 +48,23 @@ AppDispatcher.register(action => {
   switch(action.actionType) {
     case ACTIONS.ADD_TIMELINE:
       const id = TimelineStore.nextTimelineId();
+      if(__DEV__) {
+        console.log('store addTimeline', action.item);
+      }
       _timelines = _timelines.set(id, action.item);
       break;
 
     case ACTIONS.UPDATE_TIMELINE:
+      if(__DEV__) {
+        console.log('store addTimeline', action.id, action.item);
+      }
       _timelines = _timelines.set(action.id, action.item);
       break;
 
     case ACTIONS.DELETE_TIMELINE:
+      if(__DEV__) {
+        console.log('store addTimeline', action.id);
+      }
       _timelines = _timelines.remove(action.id);
       break;
 

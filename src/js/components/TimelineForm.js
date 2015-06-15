@@ -12,15 +12,17 @@ export default React.createClass({
   },
 
   getInitialState() {
+    const item = this.props.item;
     let date = '';
-    if (this.props.item && this.props.item.get('date')) {
-      date = this.props.item.get('date').format('YYYY-MM-DD');
+    if (item && item.get('date')) {
+      date = item.get('date').format('YYYY-MM-DD');
     } else {
       date = moment().format('YYYY-MM-DD');
     }
     return {
       date: date,
-      text: (this.props.item && this.props.item.get('text')) || '',
+      text: (item && item.get('text')) || '',
+      featured: (item && item.get('featured')) || false,
       dateError: null,
       textError: null
     };
@@ -50,10 +52,15 @@ export default React.createClass({
     });
     if(dateError === null && textError === null) {
       const objectDate = moment(this.state.date);
-      this.props.onFormSubmit(Map({date: objectDate, text: this.state.text}));
+      this.props.onFormSubmit(Map({
+        date: objectDate,
+        text: this.state.text,
+        featured: this.state.featured
+      }));
       this.setState({
-        date: '',
-        text: ''
+        date: moment().format('YYYY-MM-DD'),
+        text: '',
+        featured: false
       });
     }
   },
@@ -68,6 +75,11 @@ export default React.createClass({
 
   _onTextChange(e) {
     this.setState({text: e.target.value});
+  },
+
+  _onFeauturedChange(e) {
+    console.log(e);
+    this.setState({featured: e.target.checked});
   },
 
   _onCancelClick(e) {
@@ -107,6 +119,15 @@ export default React.createClass({
             placeholder='Type something...'
             onChange={this._onTextChange}
             value={this.state.text} />
+        </div>
+        <div>
+          <label>
+            <input
+              type='checkbox'
+              checked={this.state.featured}
+              onChange={this._onFeaturedChange} />
+            Featured
+          </label>
         </div>
         {buttons}
       </form>

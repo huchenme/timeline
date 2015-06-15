@@ -27,7 +27,6 @@
     "autoprefixer": "^5.1.1",
     "babel-eslint": "^3.1.5",
     "babel-loader": "^5.0.0",
-    "chai": "^2.3.0",
     "css-loader": "^0.12.0",
     "cssnext": "^1.4.0",
     "del": "^1.2.0",
@@ -38,7 +37,6 @@
     "gulp": "^3.8.11",
     "gulp-eslint": "^0.12.0",
     "gulp-load-plugins": "^0.10.0",
-    "gulp-mocha": "^2.0.1",
     "gulp-shell": "^0.4.1",
     "immutable": "^3.7.3",
     "marked": "^0.3.3",
@@ -51,7 +49,6 @@
     "react": "^0.13.3",
     "sass-loader": "^1.0.2",
     "style-loader": "^0.12.1",
-    "underscore": "^1.8.3",
     "webpack-notifier": "^1.2.1"
   },
   "dependencies": {}
