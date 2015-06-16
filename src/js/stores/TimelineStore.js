@@ -1,10 +1,9 @@
-/* global __DEV__ */
 import {OrderedMap, Map, List} from 'immutable';
 import {EventEmitter} from 'events';
 import assign from 'object-assign';
 import moment from 'moment';
 
-import {ACTIONS, CHANGE} from 'js/constants/AppConstants';
+import {TimelineActions, CHANGE} from 'js/constants/AppConstants';
 import AppDispatcher from 'js/dispatcher/AppDispatcher';
 import timelineData from 'data/timelines';
 
@@ -50,16 +49,16 @@ AppDispatcher.register(action => {
     console.log('[DISPATCHER]', action);
   }
   switch(action.actionType) {
-    case ACTIONS.ADD_TIMELINE:
+    case TimelineActions.ADD_TIMELINE:
       const id = TimelineStore.nextTimelineId();
       _timelines = _timelines.set(id, action.item);
       break;
 
-    case ACTIONS.UPDATE_TIMELINE:
+    case TimelineActions.UPDATE_TIMELINE:
       _timelines = _timelines.set(action.id, action.item);
       break;
 
-    case ACTIONS.DELETE_TIMELINE:
+    case TimelineActions.DELETE_TIMELINE:
       _timelines = _timelines.remove(action.id);
       break;
 
