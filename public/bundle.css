@@ -430,6 +430,9 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }
+
+a {
+  cursor: pointer; }
 .tl-TimelineForm-date {
   display: -webkit-box;
   display: -webkit-flex;

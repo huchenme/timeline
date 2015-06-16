@@ -38940,14 +38940,26 @@
 	
 	var _React2 = _interopRequireDefault(_React);
 	
+	var _Navigation = __webpack_require__(268);
+	
 	exports['default'] = _React2['default'].createClass({
 	  displayName: 'Login',
+	
+	  mixins: [_Navigation.Navigation],
+	
+	  _onClick: function _onClick() {
+	    this.transitionTo('/');
+	  },
 	
 	  render: function render() {
 	    return _React2['default'].createElement(
 	      'div',
 	      null,
-	      'Login'
+	      _React2['default'].createElement(
+	        'a',
+	        { onClick: this._onClick },
+	        'Login'
+	      )
 	    );
 	  }
 	});
