@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import {OrderedMap} from 'immutable';
 
 import TimelineItem from 'js/components/TimelineItem';
-import TimelineTabs from 'js/components/TimelineTabs';
+import TimelineTab from 'js/components/TimelineTab';
 import {TABS} from 'js/constants/AppConstants';
 
 export default React.createClass({
@@ -16,11 +16,29 @@ export default React.createClass({
     };
   },
 
+  getList() {
+    switch(this.state.activeTab) {
+      case TABS.FEATURED:
+        return this.props.list.filter(item => item.get('featured'));
+      default:
+        return this.props.list;
+    }
+  },
+
+  onChangeTab(newTab) {
+    if(newTab !== this.state.activeTab) {
+      this.setState({activeTab: newTab});
+    }
+  },
+
   render() {
-    const list = this.props.list;
+    const list = this.getList();
     return (
       <div>
-        <TimelineTabs activeTab={this.state.activeTab} />
+        <div>
+          <TimelineTab tab={TABS.ALL} onTabClick={this.onChangeTab} />
+          <TimelineTab tab={TABS.FEATURED} onTabClick={this.onChangeTab} />
+        </div>
         {list.map((value, key) =>
           <TimelineItem key={key} id={key} item={value} />
         )}

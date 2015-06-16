@@ -1,6 +1,6 @@
 const TABS = {
   ALL: 'ALL',
-  HIGHTLIGHT: 'HIGHTLIGHT'
+  FEATURED: 'FEATURED'
 };
 
 const ACTIONS = {

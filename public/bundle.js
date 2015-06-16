@@ -412,9 +412,9 @@
 	
 	var _TimelineItem2 = _interopRequireDefault(_TimelineItem);
 	
-	var _TimelineTabs = __webpack_require__(18);
+	var _TimelineTab = __webpack_require__(265);
 	
-	var _TimelineTabs2 = _interopRequireDefault(_TimelineTabs);
+	var _TimelineTab2 = _interopRequireDefault(_TimelineTab);
 	
 	var _TABS = __webpack_require__(16);
 	
@@ -431,12 +431,34 @@
 	    };
 	  },
 	
+	  getList: function getList() {
+	    switch (this.state.activeTab) {
+	      case _TABS.TABS.FEATURED:
+	        return this.props.list.filter(function (item) {
+	          return item.get('featured');
+	        });
+	      default:
+	        return this.props.list;
+	    }
+	  },
+	
+	  onChangeTab: function onChangeTab(newTab) {
+	    if (newTab !== this.state.activeTab) {
+	      this.setState({ activeTab: newTab });
+	    }
+	  },
+	
 	  render: function render() {
-	    var list = this.props.list;
+	    var list = this.getList();
 	    return _React$PropTypes2['default'].createElement(
 	      'div',
 	      null,
-	      _React$PropTypes2['default'].createElement(_TimelineTabs2['default'], { activeTab: this.state.activeTab }),
+	      _React$PropTypes2['default'].createElement(
+	        'div',
+	        null,
+	        _React$PropTypes2['default'].createElement(_TimelineTab2['default'], { tab: _TABS.TABS.ALL, onTabClick: this.onChangeTab }),
+	        _React$PropTypes2['default'].createElement(_TimelineTab2['default'], { tab: _TABS.TABS.FEATURED, onTabClick: this.onChangeTab })
+	      ),
 	      list.map(function (value, key) {
 	        return _React$PropTypes2['default'].createElement(_TimelineItem2['default'], { key: key, id: key, item: value });
 	      })
@@ -764,7 +786,7 @@
 	});
 	var TABS = {
 	  ALL: 'ALL',
-	  HIGHTLIGHT: 'HIGHTLIGHT'
+	  FEATURED: 'FEATURED'
 	};
 	
 	var ACTIONS = {
@@ -908,39 +930,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	
-	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
-	
-	var _React$PropTypes = __webpack_require__(2);
-	
-	var _React$PropTypes2 = _interopRequireDefault(_React$PropTypes);
-	
-	exports['default'] = _React$PropTypes2['default'].createClass({
-	  displayName: 'TimelineTabs',
-	
-	  propTypes: {
-	    activeTab: _React$PropTypes.PropTypes.string.isRequired
-	  },
-	
-	  render: function render() {
-	    return _React$PropTypes2['default'].createElement(
-	      'div',
-	      null,
-	      this.props.activeTab
-	    );
-	  }
-	});
-	module.exports = exports['default'];
-
-/***/ },
+/* 18 */,
 /* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -38906,6 +38896,45 @@
 	module.exports = toArray;
 	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(46)))
+
+/***/ },
+/* 265 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	var _React$PropTypes = __webpack_require__(2);
+	
+	var _React$PropTypes2 = _interopRequireDefault(_React$PropTypes);
+	
+	exports['default'] = _React$PropTypes2['default'].createClass({
+	  displayName: 'TimelineTab',
+	
+	  propTypes: {
+	    tab: _React$PropTypes.PropTypes.string.isRequired,
+	    onTabClick: _React$PropTypes.PropTypes.func.isRequired
+	  },
+	
+	  _onClick: function _onClick(e) {
+	    e.preventDefault();
+	    this.props.onTabClick(this.props.tab);
+	  },
+	
+	  render: function render() {
+	    return _React$PropTypes2['default'].createElement(
+	      'a',
+	      { href: '#', onClick: this._onClick },
+	      this.props.tab
+	    );
+	  }
+	});
+	module.exports = exports['default'];
 
 /***/ }
 /******/ ]);
