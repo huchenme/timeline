@@ -6,6 +6,10 @@ import marked from 'marked';
 import TimelineForm from 'js/components/TimelineForm';
 import TimelineActions from 'js/actions/TimelineActions';
 
+marked.setOptions({
+  sanitize: true
+});
+
 export default React.createClass({
   propTypes: {
     id: PropTypes.string.isRequired,
@@ -41,7 +45,7 @@ export default React.createClass({
 
   render() {
     let item = this.props.item;
-    const rawMarkup = marked(item.get('text'), {sanitize: true});
+    const rawMarkup = marked(item.get('text'));
     let inputNode, itemNode;
     if (this.state.isEditing) {
       inputNode = (

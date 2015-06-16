@@ -835,6 +835,10 @@
 	
 	var _TimelineActions2 = _interopRequireDefault(_TimelineActions);
 	
+	_marked2['default'].setOptions({
+	  sanitize: true
+	});
+	
 	exports['default'] = _React$PropTypes2['default'].createClass({
 	  displayName: 'TimelineItem',
 	
@@ -872,7 +876,7 @@
 	
 	  render: function render() {
 	    var item = this.props.item;
-	    var rawMarkup = _marked2['default'](item.get('text'), { sanitize: true });
+	    var rawMarkup = _marked2['default'](item.get('text'));
 	    var inputNode = undefined,
 	        itemNode = undefined;
 	    if (this.state.isEditing) {
