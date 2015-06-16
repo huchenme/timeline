@@ -1,8 +1,10 @@
 import React, {PropTypes} from 'react';
 import moment from 'moment';
-import {Map} from 'immutable';
+import {Map, List} from 'immutable';
 
 require('css/components/TimelineForm');
+
+const MAX_IMAGES = 2;
 
 export default React.createClass({
   propTypes: {
@@ -23,6 +25,7 @@ export default React.createClass({
       date: date,
       text: (item && item.get('text')) || '',
       featured: (item && item.get('featured')) || false,
+      images: (item && item.get('images')) || List(),
       dateError: null,
       textError: null
     };
@@ -31,16 +34,18 @@ export default React.createClass({
   _onSubmit(e) {
     e.preventDefault();
     let dateError, textError;
-    if(this.state.text.trim() === '') {
+    const textInput = this.state.text;
+    const dateInput = this.state.date;
+    if(textInput.trim() === '') {
       textError = 'empty text';
       console.log('empty text');
     } else {
       textError = null;
     }
-    if(this.state.date.trim() === '') {
+    if(dateInput.trim() === '') {
       dateError = 'empty date';
       console.log('empty date');
-    } else if(!this._isValidDate(this.state.date.trim())) {
+    } else if(!this._isValidDate(dateInput.trim())) {
       dateError = 'invalid date';
       console.log('invalid date');
     } else {
@@ -51,16 +56,18 @@ export default React.createClass({
       textError: textError
     });
     if(dateError === null && textError === null) {
-      const objectDate = moment(this.state.date);
+      const objectDate = moment(dateInput);
       this.props.onFormSubmit(Map({
         date: objectDate,
-        text: this.state.text,
-        featured: this.state.featured
+        text: textInput,
+        featured: this.state.featured,
+        images: this.state.images.filterNot(image => image.trim() === '')
       }));
       this.setState({
         date: moment().format('YYYY-MM-DD'),
         text: '',
-        featured: false
+        featured: false,
+        images: List()
       });
     }
   },
@@ -77,14 +84,30 @@ export default React.createClass({
     this.setState({text: e.target.value});
   },
 
-  _onFeauturedChange(e) {
-    console.log(e);
-    this.setState({featured: e.target.checked});
+  _onFeauturedChange() {
+    this.setState({featured: !this.state.featured});
   },
 
   _onCancelClick(e) {
     e.preventDefault();
     this.props.onFormCancel();
+  },
+
+  _onAddImage(e) {
+    e.preventDefault();
+    if(this.state.images.size < MAX_IMAGES) {
+      this.setState({images: this.state.images.push('')});
+    }
+  },
+
+  _onRemoveImage(index, e) {
+    e.preventDefault();
+    this.setState({images: this.state.images.remove(index)});
+  },
+
+  _onImageChange(index, e) {
+    e.preventDefault();
+    this.setState({images: this.state.images.set(index, e.target.value.trim())});
   },
 
   render() {
@@ -101,12 +124,15 @@ export default React.createClass({
         <button type='submit'>Post</button>
       );
     }
+    let addImageButton;
+    if (this.state.images.size < MAX_IMAGES) {
+      addImageButton = <button onClick={this._onAddImage}>Add Image</button>;
+    }
     return (
       <form className='tl-TimelineForm' onSubmit={this._onSubmit}>
         <div className='tl-TimelineForm-date'>
           <input
             className='tl-TimelineForm-dateInput'
-            ref='date'
             type='text'
             placeholder='日期 YYYY-MM-DD'
             onChange={this._onDateChange}
@@ -115,19 +141,32 @@ export default React.createClass({
         <div className='tl-TimelineForm-text'>
           <textarea
             className='tl-TimelineForm-textInput'
-            ref='text'
             placeholder='Type something...'
             onChange={this._onTextChange}
             value={this.state.text} />
         </div>
         <div>
           <label>
-            <input
-              type='checkbox'
-              checked={this.state.featured}
-              onChange={this._onFeaturedChange} />
+            <input type='checkbox'
+              checked = {this.state.featured}
+              onChange={this._onFeauturedChange} />
             Featured
           </label>
+          {addImageButton}
+        </div>
+        <div>
+          <ul>
+            {this.state.images.map((image, index) =>
+              <li key={index}>
+                <input
+                  type='text'
+                  placeholder='image url'
+                  onChange={this._onImageChange.bind(this, index)}
+                  value={image} />
+                <button onClick={this._onRemoveImage.bind(this, index)}>x</button>
+              </li>
+            )}
+          </ul>
         </div>
         {buttons}
       </form>

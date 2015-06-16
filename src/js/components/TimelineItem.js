@@ -20,21 +20,17 @@ export default React.createClass({
 
   _onClickEdit(e) {
     e.preventDefault();
-    console.log('edit');
     this.setState({isEditing: true});
   },
 
   _onClickDelete(e) {
     e.preventDefault();
-    console.log('delete');
     if (confirm('Are you sure?')) {
-      console.log('deleted');
       TimelineActions.deleteItem(this.props.id);
     }
   },
 
   _onSave(item) {
-    console.log(this.props.id, item);
     TimelineActions.updateItem(this.props.id, item);
     this.setState({isEditing: false});
   },
@@ -60,6 +56,11 @@ export default React.createClass({
           <p>{moment(item.get('date')).format('YYYY 年 M 月 D 日')}</p>
           <div dangerouslySetInnerHTML={{__html: rawMarkup}} />
           <p>Featured: {item.get('featured') ? 'true' : 'false'}</p>
+          <ul>
+            {item.get('images').map((image, index) =>
+              <li key={index}>{image}</li>
+            )}
+          </ul>
           <a href='#' onClick={this._onClickEdit}>Edit</a>
           <a href='#' onClick={this._onClickDelete}>Delete</a>
         </div>
