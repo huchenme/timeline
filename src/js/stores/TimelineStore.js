@@ -3,17 +3,17 @@ import {EventEmitter} from 'events';
 import assign from 'object-assign';
 import moment from 'moment';
 
-import {TIMELINE_ACTIONS, CHANGE} from 'js/constants/AppConstants';
+import {TIMELINE_ACTIONS, CHANGE, ASYNC_REQUEST_STATUS} from 'js/constants/AppConstants';
 import AppDispatcher from 'js/dispatcher/AppDispatcher';
-import timelineData from 'data/timelines';
 
-let _timelines = getTimelineList(timelineData);
+let _timelines = OrderedMap();
+let _appStatus = ASYNC_REQUEST_STATUS.IDLE;
 
 function getTimelineList(json) {
   let list = OrderedMap();
   json.forEach(item => {
     list = list.set(item.objectId, Map({
-      date: moment(item.date),
+      date: moment(item.date.iso),
       text: item.text,
       featured: item.featured,
       images: List(item.images)
@@ -36,7 +36,11 @@ const TimelineStore = assign({}, EventEmitter.prototype, {
   },
 
   getAllItems() {
-    return _timelines.sortBy(item => item.get('date').unix());
+    return _timelines.sortBy(item => -item.get('date').unix());
+  },
+
+  getAppStatus() {
+    return _appStatus;
   },
 
   nextTimelineId() {
@@ -46,6 +50,19 @@ const TimelineStore = assign({}, EventEmitter.prototype, {
 
 TimelineStore.dispatchToken = AppDispatcher.register(action => {
   switch(action.actionType) {
+    case TIMELINE_ACTIONS.LOAD_TIMELINES:
+      _appStatus = ASYNC_REQUEST_STATUS.REQUESTING;
+      break;
+
+    case TIMELINE_ACTIONS.LOAD_TIMELINES_RESPONSE:
+      if(action.error) {
+        _appStatus = ASYNC_REQUEST_STATUS.FAILED;
+      } else {
+        _appStatus = ASYNC_REQUEST_STATUS.IDLE;
+        _timelines = getTimelineList(action.json.results);
+      }
+      break;
+
     case TIMELINE_ACTIONS.ADD_TIMELINE:
       const id = TimelineStore.nextTimelineId();
       _timelines = _timelines.set(id, action.item);

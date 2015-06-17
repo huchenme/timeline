@@ -432,7 +432,9 @@ body {
   -moz-osx-font-smoothing: grayscale; }
 
 a {
-  cursor: pointer; }
+  cursor: pointer;
+  color: -webkit-link;
+  text-decoration: underline; }
 .tl-TimelineForm-date {
   display: -webkit-box;
   display: -webkit-flex;

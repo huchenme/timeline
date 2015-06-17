@@ -5,31 +5,22 @@ import TimelineList from 'js/components/TimelineList';
 import TimelineStore from 'js/stores/TimelineStore';
 import SessionStore from 'js/stores/SessionStore';
 import TimelineActions from 'js/actions/TimelineActions';
-
-function getState() {
-  return {
-    list: TimelineStore.getAllItems(),
-    isLoggedIn: SessionStore.isLoggedIn()
-  };
-}
+import StoreMixin from 'js/mixins/StoreMixin';
 
 export default React.createClass({
-  getInitialState() {
-    return getState();
-  },
+
+  mixins: [StoreMixin(TimelineStore, SessionStore)],
 
   componentDidMount() {
-    TimelineStore.addChangeListener(this._onChange);
-    SessionStore.addChangeListener(this._onChange);
+    TimelineActions.loadTimelines();
   },
 
-  componentWillUnmount() {
-    TimelineStore.removeChangeListener(this._onChange);
-    SessionStore.removeChangeListener(this._onChange);
-  },
-
-  _onChange() {
-    this.setState(getState());
+  getStateFromStores() {
+    return {
+      list: TimelineStore.getAllItems(),
+      appStatus: TimelineStore.getAppStatus(),
+      isLoggedIn: SessionStore.isLoggedIn()
+    };
   },
 
   _onNewTimelineSubmit(item) {
@@ -37,9 +28,15 @@ export default React.createClass({
   },
 
   render() {
+    let newForm;
+    if(this.state.isLoggedIn) {
+      newForm = <TimelineForm onFormSubmit={this._onNewTimelineSubmit} />;
+    }
     return (
       <div>
-        <TimelineForm onFormSubmit={this._onNewTimelineSubmit} />
+        {newForm}
+        <br />
+        {this.state.appStatus}
         <br />
         <TimelineList list={this.state.list} />
       </div>

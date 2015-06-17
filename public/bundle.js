@@ -154,32 +154,25 @@
 	
 	var _TimelineActions2 = _interopRequireDefault(_TimelineActions);
 	
-	function getState() {
-	  return {
-	    list: _TimelineStore2['default'].getAllItems(),
-	    isLoggedIn: _SessionStore2['default'].isLoggedIn()
-	  };
-	}
+	var _StoreMixin = __webpack_require__(331);
+	
+	var _StoreMixin2 = _interopRequireDefault(_StoreMixin);
 	
 	exports['default'] = _React2['default'].createClass({
 	  displayName: 'Home',
 	
-	  getInitialState: function getInitialState() {
-	    return getState();
-	  },
+	  mixins: [_StoreMixin2['default'](_TimelineStore2['default'], _SessionStore2['default'])],
 	
 	  componentDidMount: function componentDidMount() {
-	    _TimelineStore2['default'].addChangeListener(this._onChange);
-	    _SessionStore2['default'].addChangeListener(this._onChange);
+	    _TimelineActions2['default'].loadTimelines();
 	  },
 	
-	  componentWillUnmount: function componentWillUnmount() {
-	    _TimelineStore2['default'].removeChangeListener(this._onChange);
-	    _SessionStore2['default'].removeChangeListener(this._onChange);
-	  },
-	
-	  _onChange: function _onChange() {
-	    this.setState(getState());
+	  getStateFromStores: function getStateFromStores() {
+	    return {
+	      list: _TimelineStore2['default'].getAllItems(),
+	      appStatus: _TimelineStore2['default'].getAppStatus(),
+	      isLoggedIn: _SessionStore2['default'].isLoggedIn()
+	    };
 	  },
 	
 	  _onNewTimelineSubmit: function _onNewTimelineSubmit(item) {
@@ -187,10 +180,16 @@
 	  },
 	
 	  render: function render() {
+	    var newForm = undefined;
+	    if (this.state.isLoggedIn) {
+	      newForm = _React2['default'].createElement(_TimelineForm2['default'], { onFormSubmit: this._onNewTimelineSubmit });
+	    }
 	    return _React2['default'].createElement(
 	      'div',
 	      null,
-	      _React2['default'].createElement(_TimelineForm2['default'], { onFormSubmit: this._onNewTimelineSubmit }),
+	      newForm,
+	      _React2['default'].createElement('br', null),
+	      this.state.appStatus,
 	      _React2['default'].createElement('br', null),
 	      _React2['default'].createElement(_TimelineList2['default'], { list: this.state.list })
 	    );
@@ -688,23 +687,20 @@
 	
 	var _moment2 = _interopRequireDefault(_moment);
 	
-	var _TIMELINE_ACTIONS$CHANGE = __webpack_require__(42);
+	var _TIMELINE_ACTIONS$CHANGE$ASYNC_REQUEST_STATUS = __webpack_require__(42);
 	
 	var _AppDispatcher = __webpack_require__(43);
 	
 	var _AppDispatcher2 = _interopRequireDefault(_AppDispatcher);
 	
-	var _timelineData = __webpack_require__(44);
-	
-	var _timelineData2 = _interopRequireDefault(_timelineData);
-	
-	var _timelines = getTimelineList(_timelineData2['default']);
+	var _timelines = _OrderedMap$Map$List.OrderedMap();
+	var _appStatus = _TIMELINE_ACTIONS$CHANGE$ASYNC_REQUEST_STATUS.ASYNC_REQUEST_STATUS.IDLE;
 	
 	function getTimelineList(json) {
 	  var list = _OrderedMap$Map$List.OrderedMap();
 	  json.forEach(function (item) {
 	    list = list.set(item.objectId, _OrderedMap$Map$List.Map({
-	      date: _moment2['default'](item.date),
+	      date: _moment2['default'](item.date.iso),
 	      text: item.text,
 	      featured: item.featured,
 	      images: _OrderedMap$Map$List.List(item.images)
@@ -715,21 +711,25 @@
 	
 	var TimelineStore = _assign2['default']({}, _EventEmitter.EventEmitter.prototype, {
 	  emitChange: function emitChange() {
-	    this.emit(_TIMELINE_ACTIONS$CHANGE.CHANGE);
+	    this.emit(_TIMELINE_ACTIONS$CHANGE$ASYNC_REQUEST_STATUS.CHANGE);
 	  },
 	
 	  addChangeListener: function addChangeListener(callback) {
-	    this.on(_TIMELINE_ACTIONS$CHANGE.CHANGE, callback);
+	    this.on(_TIMELINE_ACTIONS$CHANGE$ASYNC_REQUEST_STATUS.CHANGE, callback);
 	  },
 	
 	  removeChangeListener: function removeChangeListener(callback) {
-	    this.removeListener(_TIMELINE_ACTIONS$CHANGE.CHANGE, callback);
+	    this.removeListener(_TIMELINE_ACTIONS$CHANGE$ASYNC_REQUEST_STATUS.CHANGE, callback);
 	  },
 	
 	  getAllItems: function getAllItems() {
 	    return _timelines.sortBy(function (item) {
-	      return item.get('date').unix();
+	      return -item.get('date').unix();
 	    });
+	  },
+	
+	  getAppStatus: function getAppStatus() {
+	    return _appStatus;
 	  },
 	
 	  nextTimelineId: function nextTimelineId() {
@@ -739,16 +739,29 @@
 	
 	TimelineStore.dispatchToken = _AppDispatcher2['default'].register(function (action) {
 	  switch (action.actionType) {
-	    case _TIMELINE_ACTIONS$CHANGE.TIMELINE_ACTIONS.ADD_TIMELINE:
+	    case _TIMELINE_ACTIONS$CHANGE$ASYNC_REQUEST_STATUS.TIMELINE_ACTIONS.LOAD_TIMELINES:
+	      _appStatus = _TIMELINE_ACTIONS$CHANGE$ASYNC_REQUEST_STATUS.ASYNC_REQUEST_STATUS.REQUESTING;
+	      break;
+	
+	    case _TIMELINE_ACTIONS$CHANGE$ASYNC_REQUEST_STATUS.TIMELINE_ACTIONS.LOAD_TIMELINES_RESPONSE:
+	      if (action.error) {
+	        _appStatus = _TIMELINE_ACTIONS$CHANGE$ASYNC_REQUEST_STATUS.ASYNC_REQUEST_STATUS.FAILED;
+	      } else {
+	        _appStatus = _TIMELINE_ACTIONS$CHANGE$ASYNC_REQUEST_STATUS.ASYNC_REQUEST_STATUS.IDLE;
+	        _timelines = getTimelineList(action.json.results);
+	      }
+	      break;
+	
+	    case _TIMELINE_ACTIONS$CHANGE$ASYNC_REQUEST_STATUS.TIMELINE_ACTIONS.ADD_TIMELINE:
 	      var id = TimelineStore.nextTimelineId();
 	      _timelines = _timelines.set(id, action.item);
 	      break;
 	
-	    case _TIMELINE_ACTIONS$CHANGE.TIMELINE_ACTIONS.UPDATE_TIMELINE:
+	    case _TIMELINE_ACTIONS$CHANGE$ASYNC_REQUEST_STATUS.TIMELINE_ACTIONS.UPDATE_TIMELINE:
 	      _timelines = _timelines.set(action.id, action.item);
 	      break;
 	
-	    case _TIMELINE_ACTIONS$CHANGE.TIMELINE_ACTIONS.DELETE_TIMELINE:
+	    case _TIMELINE_ACTIONS$CHANGE$ASYNC_REQUEST_STATUS.TIMELINE_ACTIONS.DELETE_TIMELINE:
 	      _timelines = _timelines.remove(action.id);
 	      break;
 	
@@ -779,7 +792,33 @@
 	
 	var _AppDispatcher2 = _interopRequireDefault(_AppDispatcher);
 	
+	var _WebAPIUtils = __webpack_require__(309);
+	
+	var _WebAPIUtils2 = _interopRequireDefault(_WebAPIUtils);
+	
 	exports['default'] = {
+	  loadTimelines: function loadTimelines() {
+	    _AppDispatcher2['default'].dispatch({
+	      actionType: _TIMELINE_ACTIONS.TIMELINE_ACTIONS.LOAD_TIMELINES
+	    });
+	    _WebAPIUtils2['default'].loadTimelines();
+	  },
+	
+	  loadTimelinesFail: function loadTimelinesFail() {
+	    _AppDispatcher2['default'].dispatch({
+	      actionType: _TIMELINE_ACTIONS.TIMELINE_ACTIONS.LOAD_TIMELINES_RESPONSE,
+	      error: true
+	    });
+	  },
+	
+	  loadTimelinesSuccess: function loadTimelinesSuccess(json) {
+	    _AppDispatcher2['default'].dispatch({
+	      actionType: _TIMELINE_ACTIONS.TIMELINE_ACTIONS.LOAD_TIMELINES_RESPONSE,
+	      json: json,
+	      error: false
+	    });
+	  },
+	
 	  addItem: function addItem(item) {
 	    _AppDispatcher2['default'].dispatch({
 	      actionType: _TIMELINE_ACTIONS.TIMELINE_ACTIONS.ADD_TIMELINE,
@@ -3160,14 +3199,25 @@
 	};
 	
 	var TIMELINE_ACTIONS = {
+	  LOAD_TIMELINES: 'LOAD_TIMELINES',
+	  LOAD_TIMELINES_RESPONSE: 'LOAD_TIMELINES_RESPONSE',
 	  ADD_TIMELINE: 'ADD_TIMELINE',
+	  ADD_TIMELINE_RESPONSE: 'ADD_TIMELINE_RESPONSE',
 	  DELETE_TIMELINE: 'DELETE_TIMELINE',
-	  UPDATE_TIMELINE: 'UPDATE_TIMELINE'
+	  DELETE_TIMELINE_RESPONSE: 'DELETE_TIMELINE_RESPONSE',
+	  UPDATE_TIMELINE: 'UPDATE_TIMELINE',
+	  UPDATE_TIMELINE_RESPONSE: 'UPDATE_TIMELINE_RESPONSE'
 	};
 	
 	var SESSION_ACTIONS = {
 	  LOGIN_REQUEST: 'LOGIN_REQUEST',
 	  LOGIN_RESPONSE: 'LOGIN_RESPONSE'
+	};
+	
+	var ASYNC_REQUEST_STATUS = {
+	  IDLE: 'IDLE',
+	  REQUESTING: 'REQUESTING',
+	  FAILED: 'FAILED'
 	};
 	
 	var APIRoot = 'https://api.LEANCLOUD.cn/1.1';
@@ -3206,6 +3256,7 @@
 	exports.API_ENDPOINTS = API_ENDPOINTS;
 	exports.API_HEADERS = API_HEADERS;
 	exports.LEANCLOUD = LEANCLOUD;
+	exports.ASYNC_REQUEST_STATUS = ASYNC_REQUEST_STATUS;
 
 /***/ },
 /* 43 */
@@ -3231,36 +3282,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 44 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	exports['default'] = [{
-	  objectId: '5548d3f1e4b03fd83456cdf1',
-	  text: 'this is **some** markdown 2',
-	  date: '2014-12-31T16:00:00.000Z',
-	  featured: false,
-	  images: ['http://www.hdwallpapersimages.com/wp-content/uploads/2014/01/Winter-Tiger-Wild-Cat-Images.jpg', 'http://3.bp.blogspot.com/-rZmCIp0C-hQ/Tx6aCFeweoI/AAAAAAAAAnQ/WqIEVBTIzRk/s1600/Cool-Tiger-Wallpaper-1920x1080-HD.jpg']
-	}, {
-	  objectId: '5548d3f1e4b03fd83456cdf2',
-	  text: 'this is *some* markdown featured',
-	  date: '2014-12-30T16:00:00.000Z',
-	  featured: true,
-	  images: []
-	}, {
-	  objectId: '5548d3f1e4b03fd83456cdf3',
-	  text: '**this** is *some* markdown 3 featured',
-	  date: '2014-11-30T16:00:00.000Z',
-	  featured: true,
-	  images: ['http://www.freestockphotos.name/wallpaper-original/wallpapers/download-images-of-gentle-dogs-6866.jpg']
-	}];
-	module.exports = exports['default'];
-
-/***/ },
+/* 44 */,
 /* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -42390,12 +42412,15 @@
 	
 	var _SessionActions2 = _interopRequireDefault(_SessionActions);
 	
+	var _TimelineActions = __webpack_require__(15);
+	
+	var _TimelineActions2 = _interopRequireDefault(_TimelineActions);
+	
 	exports['default'] = {
 	  login: function login(username, password) {
-	    console.log(username, password);
 	    _request2['default'].get(_API_ENDPOINTS$API_HEADERS$LEANCLOUD.API_ENDPOINTS.LOGIN).set(_API_ENDPOINTS$API_HEADERS$LEANCLOUD.API_HEADERS.APP_ID, _API_ENDPOINTS$API_HEADERS$LEANCLOUD.LEANCLOUD.APP_ID).set(_API_ENDPOINTS$API_HEADERS$LEANCLOUD.API_HEADERS.APP_KEY, _API_ENDPOINTS$API_HEADERS$LEANCLOUD.LEANCLOUD.APP_KEY).query({ username: username, password: password }).end(function (error, res) {
 	      if (true) {
-	        console.log(res, error);
+	        console.log('login', res, error);
 	      }
 	      if (error) {
 	        _SessionActions2['default'].loginFail();
@@ -42404,7 +42429,33 @@
 	        _SessionActions2['default'].loginSuccess(json);
 	      }
 	    });
+	  },
+	
+	  loadTimelines: function loadTimelines() {
+	    _request2['default'].get(_API_ENDPOINTS$API_HEADERS$LEANCLOUD.API_ENDPOINTS.TIMELINES).set(_API_ENDPOINTS$API_HEADERS$LEANCLOUD.API_HEADERS.APP_ID, _API_ENDPOINTS$API_HEADERS$LEANCLOUD.LEANCLOUD.APP_ID).set(_API_ENDPOINTS$API_HEADERS$LEANCLOUD.API_HEADERS.APP_KEY, _API_ENDPOINTS$API_HEADERS$LEANCLOUD.LEANCLOUD.APP_KEY).end(function (error, res) {
+	      if (true) {
+	        console.log('loadTimelines', res, error);
+	      }
+	      if (error) {
+	        _TimelineActions2['default'].loadTimelinesFail();
+	      } else {
+	        var json = JSON.parse(res.text);
+	        _TimelineActions2['default'].loadTimelinesSuccess(json);
+	      }
+	    });
 	  }
+	
+	  // createTimeline(data) {
+	
+	  // },
+	
+	  // updateTimeline(id, data) {
+	
+	  // },
+	
+	  // deleteTimeline(id) {
+	
+	  // }
 	};
 	module.exports = exports['default'];
 
@@ -45856,6 +45907,51 @@
 	
 	module.exports = joinClasses;
 
+
+/***/ },
+/* 331 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	exports["default"] = function () {
+	  for (var _len = arguments.length, stores = Array(_len), _key = 0; _key < _len; _key++) {
+	    stores[_key] = arguments[_key];
+	  }
+	
+	  var Mixin = {
+	    getInitialState: function getInitialState() {
+	      return this.getStateFromStores(this.props);
+	    },
+	    componentDidMount: function componentDidMount() {
+	      var _this = this;
+	
+	      stores.forEach(function (store) {
+	        return store.addChangeListener(_this.handleStoresChanged);
+	      });
+	      this.setState(this.getStateFromStores(this.props));
+	    },
+	    componentWillUnmount: function componentWillUnmount() {
+	      var _this2 = this;
+	
+	      stores.forEach(function (store) {
+	        return store.removeChangeListener(_this2.handleStoresChanged);
+	      });
+	    },
+	    handleStoresChanged: function handleStoresChanged() {
+	      if (this.isMounted()) {
+	        this.setState(this.getStateFromStores(this.props));
+	      }
+	    }
+	  };
+	  return Mixin;
+	};
+	
+	module.exports = exports["default"];
 
 /***/ }
 /******/ ]);
