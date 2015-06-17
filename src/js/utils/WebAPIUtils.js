@@ -1,6 +1,6 @@
 import request from 'superagent';
 
-import {API_ENDPOINTS, API_HEADERS, LEANCLOUD} from 'js/constants/AppConstants';
+import {API_ENDPOINTS, API_HEADERS, LEANCLOUD, USER_ID} from 'js/constants/AppConstants';
 import SessionActions from 'js/actions/SessionActions';
 import TimelineActions from 'js/actions/TimelineActions';
 
@@ -24,9 +24,10 @@ export default {
   },
 
   loadTimelines() {
-    request.get(API_ENDPOINTS.TIMELINES)
+    request.get(API_ENDPOINTS.CLOUDQUERY)
     .set(API_HEADERS.APP_ID, LEANCLOUD.APP_ID)
     .set(API_HEADERS.APP_KEY, LEANCLOUD.APP_KEY)
+    .query({cql: `select * from Timeline where createdBy=pointer('_User', '${USER_ID}') order by date desc`})
     .end(function(error, res) {
       if(__DEV__) {
         console.log('loadTimelines', res, error);
