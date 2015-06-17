@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React, {PropTypes} from 'react/addons';
 import moment from 'moment';
 import {Map, List} from 'immutable';
 
@@ -12,6 +12,8 @@ export default React.createClass({
     onFormCancel: PropTypes.func,
     item: PropTypes.instanceOf(Map)
   },
+
+  mixins: [React.addons.LinkedStateMixin],
 
   getInitialState() {
     const item = this.props.item;
@@ -76,37 +78,21 @@ export default React.createClass({
     return /^\d{4}-\d{2}-\d{2}$/.test(text) && moment(text).isValid();
   },
 
-  _onDateChange(e) {
-    this.setState({date: e.target.value});
-  },
-
-  _onTextChange(e) {
-    this.setState({text: e.target.value});
-  },
-
-  _onFeauturedChange() {
-    this.setState({featured: !this.state.featured});
-  },
-
-  _onCancelClick(e) {
-    e.preventDefault();
+  _onCancelClick() {
     this.props.onFormCancel();
   },
 
-  _onAddImage(e) {
-    e.preventDefault();
+  _onAddImage() {
     if(this.state.images.size < MAX_IMAGES) {
       this.setState({images: this.state.images.push('')});
     }
   },
 
-  _onRemoveImage(index, e) {
-    e.preventDefault();
+  _onRemoveImage(index) {
     this.setState({images: this.state.images.remove(index)});
   },
 
   _onImageChange(index, e) {
-    e.preventDefault();
     this.setState({images: this.state.images.set(index, e.target.value.trim())});
   },
 
@@ -115,7 +101,7 @@ export default React.createClass({
     if (this.props.item) {
       buttons = (
         <div>
-          <button onClick={this._onCancelClick}>Cancel</button>
+          <a onClick={this._onCancelClick}>Cancel</a>
           <button type='submit'>Save change</button>
         </div>
       );
@@ -126,7 +112,7 @@ export default React.createClass({
     }
     let addImageButton;
     if (this.state.images.size < MAX_IMAGES) {
-      addImageButton = <button onClick={this._onAddImage}>Add Image</button>;
+      addImageButton = <a onClick={this._onAddImage}>Add Image</a>;
     }
     return (
       <form className='tl-TimelineForm' onSubmit={this._onSubmit}>
@@ -135,21 +121,18 @@ export default React.createClass({
             className='tl-TimelineForm-dateInput'
             type='text'
             placeholder='日期 YYYY-MM-DD'
-            onChange={this._onDateChange}
-            value={this.state.date} />
+            valueLink={this.linkState('date')} />
         </div>
         <div className='tl-TimelineForm-text'>
           <textarea
             className='tl-TimelineForm-textInput'
             placeholder='Type something...'
-            onChange={this._onTextChange}
-            value={this.state.text} />
+            valueLink={this.linkState('text')} />
         </div>
         <div>
           <label>
             <input type='checkbox'
-              checked = {this.state.featured}
-              onChange={this._onFeauturedChange} />
+              checkedLink={this.linkState('featured')} />
             Featured
           </label>
           {addImageButton}
@@ -163,7 +146,7 @@ export default React.createClass({
                   placeholder='image url'
                   onChange={this._onImageChange.bind(this, index)}
                   value={image} />
-                <button onClick={this._onRemoveImage.bind(this, index)}>x</button>
+                <a onClick={this._onRemoveImage.bind(this, index)}>x</a>
               </li>
             )}
           </ul>
