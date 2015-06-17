@@ -1,3 +1,11 @@
 import {Dispatcher} from 'flux';
-export default new Dispatcher();
+const dispatcher = new Dispatcher();
+
+dispatcher.register(action => {
+  if(__DEV__) {
+    console.log('[DISPATCHER]', action);
+  }
+});
+
+export default dispatcher;
 

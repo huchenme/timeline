@@ -3,11 +3,13 @@ import React from 'react';
 import TimelineForm from 'js/components/TimelineForm';
 import TimelineList from 'js/components/TimelineList';
 import TimelineStore from 'js/stores/TimelineStore';
+import SessionStore from 'js/stores/SessionStore';
 import TimelineActions from 'js/actions/TimelineActions';
 
 function getState() {
   return {
-    list: TimelineStore.getAllItems()
+    list: TimelineStore.getAllItems(),
+    isLoggedIn: SessionStore.isLoggedIn()
   };
 }
 
@@ -18,10 +20,12 @@ export default React.createClass({
 
   componentDidMount() {
     TimelineStore.addChangeListener(this._onChange);
+    SessionStore.addChangeListener(this._onChange);
   },
 
   componentWillUnmount() {
     TimelineStore.removeChangeListener(this._onChange);
+    SessionStore.removeChangeListener(this._onChange);
   },
 
   _onChange() {

@@ -3,7 +3,7 @@ import {EventEmitter} from 'events';
 import assign from 'object-assign';
 import moment from 'moment';
 
-import {TimelineActions, CHANGE} from 'js/constants/AppConstants';
+import {TIMELINE_ACTIONS, CHANGE} from 'js/constants/AppConstants';
 import AppDispatcher from 'js/dispatcher/AppDispatcher';
 import timelineData from 'data/timelines';
 
@@ -44,21 +44,18 @@ const TimelineStore = assign({}, EventEmitter.prototype, {
   }
 });
 
-AppDispatcher.register(action => {
-  if(__DEV__) {
-    console.log('[DISPATCHER]', action);
-  }
+TimelineStore.dispatchToken = AppDispatcher.register(action => {
   switch(action.actionType) {
-    case TimelineActions.ADD_TIMELINE:
+    case TIMELINE_ACTIONS.ADD_TIMELINE:
       const id = TimelineStore.nextTimelineId();
       _timelines = _timelines.set(id, action.item);
       break;
 
-    case TimelineActions.UPDATE_TIMELINE:
+    case TIMELINE_ACTIONS.UPDATE_TIMELINE:
       _timelines = _timelines.set(action.id, action.item);
       break;
 
-    case TimelineActions.DELETE_TIMELINE:
+    case TIMELINE_ACTIONS.DELETE_TIMELINE:
       _timelines = _timelines.remove(action.id);
       break;
 
