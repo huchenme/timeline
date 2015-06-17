@@ -30,13 +30,18 @@ export default React.createClass({
   render() {
     let newForm;
     if(this.state.isLoggedIn) {
-      newForm = <TimelineForm onFormSubmit={this._onNewTimelineSubmit} />;
+      newForm = (
+        <div>
+          <TimelineForm onFormSubmit={this._onNewTimelineSubmit} />
+          form status
+        </div>
+      );
     }
     return (
       <div>
         {newForm}
         <br />
-        {this.state.appStatus}
+        Load timelines status: {this.state.appStatus}
         <br />
         <TimelineList list={this.state.list} />
       </div>

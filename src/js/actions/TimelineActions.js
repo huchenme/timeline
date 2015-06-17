@@ -30,6 +30,7 @@ export default {
       actionType: TIMELINE_ACTIONS.ADD_TIMELINE,
       item: item
     });
+    WebAPIUtils.createTimeline(item);
   },
 
   addItemFail() {

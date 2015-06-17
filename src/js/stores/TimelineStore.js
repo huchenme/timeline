@@ -1,26 +1,13 @@
-import {OrderedMap, Map, List} from 'immutable';
+import {OrderedMap} from 'immutable';
 import {EventEmitter} from 'events';
 import assign from 'object-assign';
-import moment from 'moment';
 
 import {TIMELINE_ACTIONS, CHANGE, ASYNC_REQUEST_STATUS} from 'js/constants/AppConstants';
 import AppDispatcher from 'js/dispatcher/AppDispatcher';
+import {timelineListfromJson} from 'js/utils/DataSerializer';
 
 let _timelines = OrderedMap();
 let _appStatus = ASYNC_REQUEST_STATUS.IDLE;
-
-function getTimelineList(json) {
-  let list = OrderedMap();
-  json.forEach(item => {
-    list = list.set(item.objectId, Map({
-      date: moment(item.date.iso),
-      text: item.text,
-      featured: item.featured,
-      images: List(item.images)
-    }));
-  });
-  return list;
-}
 
 const TimelineStore = assign({}, EventEmitter.prototype, {
   emitChange() {
@@ -59,7 +46,7 @@ TimelineStore.dispatchToken = AppDispatcher.register(action => {
         _appStatus = ASYNC_REQUEST_STATUS.FAILED;
       } else {
         _appStatus = ASYNC_REQUEST_STATUS.IDLE;
-        _timelines = getTimelineList(action.json.results);
+        _timelines = timelineListfromJson(action.json.results);
       }
       break;
 

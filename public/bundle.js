@@ -182,13 +182,19 @@
 	  render: function render() {
 	    var newForm = undefined;
 	    if (this.state.isLoggedIn) {
-	      newForm = _React2['default'].createElement(_TimelineForm2['default'], { onFormSubmit: this._onNewTimelineSubmit });
+	      newForm = _React2['default'].createElement(
+	        'div',
+	        null,
+	        _React2['default'].createElement(_TimelineForm2['default'], { onFormSubmit: this._onNewTimelineSubmit }),
+	        'form status'
+	      );
 	    }
 	    return _React2['default'].createElement(
 	      'div',
 	      null,
 	      newForm,
 	      _React2['default'].createElement('br', null),
+	      'Load timelines status: ',
 	      this.state.appStatus,
 	      _React2['default'].createElement('br', null),
 	      _React2['default'].createElement(_TimelineList2['default'], { list: this.state.list })
@@ -675,7 +681,7 @@
 	
 	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
 	
-	var _OrderedMap$Map$List = __webpack_require__(86);
+	var _OrderedMap = __webpack_require__(86);
 	
 	var _EventEmitter = __webpack_require__(76);
 	
@@ -683,31 +689,16 @@
 	
 	var _assign2 = _interopRequireDefault(_assign);
 	
-	var _moment = __webpack_require__(87);
-	
-	var _moment2 = _interopRequireDefault(_moment);
-	
 	var _TIMELINE_ACTIONS$CHANGE$ASYNC_REQUEST_STATUS = __webpack_require__(45);
 	
 	var _AppDispatcher = __webpack_require__(47);
 	
 	var _AppDispatcher2 = _interopRequireDefault(_AppDispatcher);
 	
-	var _timelines = _OrderedMap$Map$List.OrderedMap();
-	var _appStatus = _TIMELINE_ACTIONS$CHANGE$ASYNC_REQUEST_STATUS.ASYNC_REQUEST_STATUS.IDLE;
+	var _timelineListfromJson = __webpack_require__(331);
 	
-	function getTimelineList(json) {
-	  var list = _OrderedMap$Map$List.OrderedMap();
-	  json.forEach(function (item) {
-	    list = list.set(item.objectId, _OrderedMap$Map$List.Map({
-	      date: _moment2['default'](item.date.iso),
-	      text: item.text,
-	      featured: item.featured,
-	      images: _OrderedMap$Map$List.List(item.images)
-	    }));
-	  });
-	  return list;
-	}
+	var _timelines = _OrderedMap.OrderedMap();
+	var _appStatus = _TIMELINE_ACTIONS$CHANGE$ASYNC_REQUEST_STATUS.ASYNC_REQUEST_STATUS.IDLE;
 	
 	var TimelineStore = _assign2['default']({}, _EventEmitter.EventEmitter.prototype, {
 	  emitChange: function emitChange() {
@@ -748,7 +739,7 @@
 	        _appStatus = _TIMELINE_ACTIONS$CHANGE$ASYNC_REQUEST_STATUS.ASYNC_REQUEST_STATUS.FAILED;
 	      } else {
 	        _appStatus = _TIMELINE_ACTIONS$CHANGE$ASYNC_REQUEST_STATUS.ASYNC_REQUEST_STATUS.IDLE;
-	        _timelines = getTimelineList(action.json.results);
+	        _timelines = _timelineListfromJson.timelineListfromJson(action.json.results);
 	      }
 	      break;
 	
@@ -893,6 +884,7 @@
 	      actionType: _TIMELINE_ACTIONS.TIMELINE_ACTIONS.ADD_TIMELINE,
 	      item: item
 	    });
+	    _WebAPIUtils2['default'].createTimeline(item);
 	  },
 	
 	  addItemFail: function addItemFail() {
@@ -46001,6 +45993,44 @@
 	module.exports = toArray;
 	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(85)))
+
+/***/ },
+/* 331 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	
+	var _OrderedMap$Map$List = __webpack_require__(86);
+	
+	var _moment = __webpack_require__(87);
+	
+	var _moment2 = _interopRequireDefault(_moment);
+	
+	var timelineListfromJson = function timelineListfromJson(json) {
+	  var list = _OrderedMap$Map$List.OrderedMap();
+	  json.forEach(function (item) {
+	    list = list.set(item.objectId, _OrderedMap$Map$List.Map({
+	      date: _moment2['default'](item.date.iso),
+	      text: item.text,
+	      featured: item.featured,
+	      images: _OrderedMap$Map$List.List(item.images)
+	    }));
+	  });
+	  return list;
+	};
+	
+	var toJson = function toJson(data) {
+	  return data;
+	};
+	
+	exports.timelineListfromJson = timelineListfromJson;
+	exports.toJson = toJson;
 
 /***/ }
 /******/ ]);
