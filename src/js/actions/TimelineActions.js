@@ -1,6 +1,7 @@
 import {TIMELINE_ACTIONS} from 'js/constants/AppConstants';
 import AppDispatcher from 'js/dispatcher/AppDispatcher';
 import WebAPIUtils from 'js/utils/WebAPIUtils';
+import {timelineToJson} from 'js/utils/DataSerializer';
 
 export default {
   loadTimelines() {
@@ -30,7 +31,7 @@ export default {
       actionType: TIMELINE_ACTIONS.ADD_TIMELINE,
       item: item
     });
-    WebAPIUtils.createTimeline(item);
+    WebAPIUtils.createTimeline(timelineToJson(item));
   },
 
   addItemFail() {
@@ -40,9 +41,10 @@ export default {
     });
   },
 
-  addItemSuccess() {
+  addItemSuccess(json) {
     AppDispatcher.dispatch({
       actionType: TIMELINE_ACTIONS.ADD_TIMELINE_RESPONSE,
+      json: json,
       error: false
     });
   },

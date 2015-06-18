@@ -1,6 +1,8 @@
 import {OrderedMap, Map, List} from 'immutable';
 import moment from 'moment';
 
+import {USER_ID} from 'js/constants/AppConstants';
+
 const timelineListfromJson = (json) => {
   let list = OrderedMap();
   json.forEach(item => {
@@ -14,8 +16,15 @@ const timelineListfromJson = (json) => {
   return list;
 };
 
-const toJson = (data) => {
-  return data;
+const timelineToJson = (data) => {
+  return data.set('date', Map({
+    __type: 'Date',
+    iso: data.get('date').toISOString()
+  })).set('createdBy', Map({
+    __type: 'Pointer',
+    className: '_User',
+    objectId: USER_ID
+  })).toJS();
 };
 
-export {timelineListfromJson, toJson};
+export {timelineListfromJson, timelineToJson};

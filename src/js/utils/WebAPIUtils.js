@@ -3,6 +3,7 @@ import request from 'superagent';
 import {API_ENDPOINTS, API_HEADERS, LEANCLOUD, USER_ID} from 'js/constants/AppConstants';
 import SessionActions from 'js/actions/SessionActions';
 import TimelineActions from 'js/actions/TimelineActions';
+import SessionStore from 'js/stores/SessionStore';
 
 export default {
   login(username, password) {
@@ -39,11 +40,28 @@ export default {
         TimelineActions.loadTimelinesSuccess(json);
       }
     });
+  },
+
+  createTimeline(data) {
+    request.post(API_ENDPOINTS.TIMELINE)
+    .set(API_HEADERS.APP_ID, LEANCLOUD.APP_ID)
+    .set(API_HEADERS.APP_KEY, LEANCLOUD.APP_KEY)
+    .set(API_HEADERS.SESSION_TOKEN, SessionStore.getSessionToken())
+    .set('Content-Type', 'application/json')
+    .send(data)
+    .end(function(error, res) {
+      if(__DEV__) {
+        console.log('createTimeline', res, error);
+      }
+      if (error) {
+        TimelineActions.addItemFail();
+      } else {
+        const json = JSON.parse(res.text);
+        TimelineActions.addItemSuccess(json);
+      }
+    });
+    return data;
   }
-
-  // createTimeline(data) {
-
-  // },
 
   // updateTimeline(id, data) {
 

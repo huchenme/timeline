@@ -29,7 +29,8 @@ const APIRoot = 'https://api.LEANCLOUD.cn/1.1';
 
 const API_ENDPOINTS = {
   LOGIN: `${APIRoot}/login`,
-  CLOUDQUERY: `${APIRoot}/cloudQuery`
+  CLOUDQUERY: `${APIRoot}/cloudQuery`,
+  TIMELINE: `${APIRoot}/classes/Timeline`
 };
 
 const API_HEADERS = {

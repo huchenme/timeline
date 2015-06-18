@@ -19,6 +19,7 @@ export default React.createClass({
     return {
       list: TimelineStore.getAllItems(),
       appStatus: TimelineStore.getAppStatus(),
+      createStatus: TimelineStore.getCreateStatus(),
       isLoggedIn: SessionStore.isLoggedIn()
     };
   },
@@ -33,7 +34,7 @@ export default React.createClass({
       newForm = (
         <div>
           <TimelineForm onFormSubmit={this._onNewTimelineSubmit} />
-          form status
+          form status: {this.state.createStatus}
         </div>
       );
     }

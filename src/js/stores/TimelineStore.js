@@ -8,6 +8,8 @@ import {timelineListfromJson} from 'js/utils/DataSerializer';
 
 let _timelines = OrderedMap();
 let _appStatus = ASYNC_REQUEST_STATUS.IDLE;
+let _createStatus = ASYNC_REQUEST_STATUS.IDLE;
+let _newTimeline;
 
 const TimelineStore = assign({}, EventEmitter.prototype, {
   emitChange() {
@@ -28,6 +30,10 @@ const TimelineStore = assign({}, EventEmitter.prototype, {
 
   getAppStatus() {
     return _appStatus;
+  },
+
+  getCreateStatus() {
+    return _createStatus;
   },
 
   nextTimelineId() {
@@ -51,8 +57,18 @@ TimelineStore.dispatchToken = AppDispatcher.register(action => {
       break;
 
     case TIMELINE_ACTIONS.ADD_TIMELINE:
-      const id = TimelineStore.nextTimelineId();
-      _timelines = _timelines.set(id, action.item);
+      _createStatus = ASYNC_REQUEST_STATUS.REQUESTING;
+      _newTimeline = action.item;
+      break;
+
+    case TIMELINE_ACTIONS.ADD_TIMELINE_RESPONSE:
+      if(action.error) {
+        _createStatus = ASYNC_REQUEST_STATUS.FAILED;
+      } else {
+        _createStatus = ASYNC_REQUEST_STATUS.IDLE;
+        _timelines = _timelines.set(action.json.objectId, _newTimeline);
+        _newTimeline = null;
+      }
       break;
 
     case TIMELINE_ACTIONS.UPDATE_TIMELINE:
