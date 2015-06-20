@@ -5,6 +5,8 @@ import marked from 'marked';
 
 import TimelineForm from 'js/components/TimelineForm';
 import TimelineActions from 'js/actions/TimelineActions';
+import SessionStore from 'js/stores/SessionStore';
+import StoreMixin from 'js/mixins/StoreMixin';
 
 marked.setOptions({
   sanitize: true
@@ -16,9 +18,17 @@ export default React.createClass({
     item: PropTypes.instanceOf(Map).isRequired
   },
 
+  mixins: [StoreMixin(SessionStore)],
+
   getInitialState() {
     return {
       isEditing: false
+    };
+  },
+
+  getStateFromStores() {
+    return {
+      isLoggedIn: SessionStore.isLoggedIn()
     };
   },
 
@@ -46,7 +56,15 @@ export default React.createClass({
   render() {
     let item = this.props.item;
     const rawMarkup = marked(item.get('text'));
-    let inputNode, itemNode;
+    let inputNode, itemNode, userActions;
+    if (this.state.isLoggedIn) {
+      userActions = (
+        <div>
+          <a href='#' onClick={this._onClickEdit}>Edit</a>
+          <a href='#' onClick={this._onClickDelete}>Delete</a>
+        </div>
+      );
+    }
     if (this.state.isEditing) {
       inputNode = (
         <TimelineForm
@@ -65,8 +83,7 @@ export default React.createClass({
               <li key={index}>{image}</li>
             )}
           </ul>
-          <a href='#' onClick={this._onClickEdit}>Edit</a>
-          <a href='#' onClick={this._onClickDelete}>Delete</a>
+          {userActions}
         </div>
       );
     }

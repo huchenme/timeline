@@ -1,7 +1,7 @@
 import {TIMELINE_ACTIONS} from 'js/constants/AppConstants';
 import AppDispatcher from 'js/dispatcher/AppDispatcher';
 import WebAPIUtils from 'js/utils/WebAPIUtils';
-import {timelineToJson} from 'js/utils/DataSerializer';
+import {timelineToJson, timelineUpdateJson} from 'js/utils/DataSerializer';
 
 export default {
   loadTimelines() {
@@ -41,10 +41,10 @@ export default {
     });
   },
 
-  addItemSuccess(json) {
+  addItemSuccess(id) {
     AppDispatcher.dispatch({
       actionType: TIMELINE_ACTIONS.ADD_TIMELINE_RESPONSE,
-      json: json,
+      id: id,
       error: false
     });
   },
@@ -55,6 +55,7 @@ export default {
       id: id,
       item: item
     });
+    WebAPIUtils.updateTimeline(id, timelineUpdateJson(item));
   },
 
   updateItemFail(id) {
@@ -78,6 +79,7 @@ export default {
       actionType: TIMELINE_ACTIONS.DELETE_TIMELINE,
       id: id
     });
+    WebAPIUtils.deleteTimeline(id);
   },
 
   deleteItemFail(id) {

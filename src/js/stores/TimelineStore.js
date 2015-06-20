@@ -66,7 +66,7 @@ TimelineStore.dispatchToken = AppDispatcher.register(action => {
         _createStatus = ASYNC_REQUEST_STATUS.FAILED;
       } else {
         _createStatus = ASYNC_REQUEST_STATUS.IDLE;
-        _timelines = _timelines.set(action.json.objectId, _newTimeline);
+        _timelines = _timelines.set(action.id, _newTimeline);
         _newTimeline = null;
       }
       break;
@@ -75,8 +75,24 @@ TimelineStore.dispatchToken = AppDispatcher.register(action => {
       _timelines = _timelines.set(action.id, action.item);
       break;
 
+    case TIMELINE_ACTIONS.UPDATE_TIMELINE_RESPONSE:
+      if(action.error) {
+        console.log('update fail');
+      } else {
+        console.log('update success');
+      }
+      break;
+
     case TIMELINE_ACTIONS.DELETE_TIMELINE:
       _timelines = _timelines.remove(action.id);
+      break;
+
+    case TIMELINE_ACTIONS.DELETE_TIMELINE_RESPONSE:
+      if(action.error) {
+        console.log('delete fail');
+      } else {
+        console.log('delete success');
+      }
       break;
 
     default:

@@ -27,4 +27,11 @@ const timelineToJson = (data) => {
   })).toJS();
 };
 
-export {timelineListfromJson, timelineToJson};
+const timelineUpdateJson = (data) => {
+  return data.set('date', Map({
+    __type: 'Date',
+    iso: data.get('date').toISOString()
+  })).toJS();
+};
+
+export {timelineListfromJson, timelineToJson, timelineUpdateJson};

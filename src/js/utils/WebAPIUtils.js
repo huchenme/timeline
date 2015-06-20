@@ -47,7 +47,7 @@ export default {
     .set(API_HEADERS.APP_ID, LEANCLOUD.APP_ID)
     .set(API_HEADERS.APP_KEY, LEANCLOUD.APP_KEY)
     .set(API_HEADERS.SESSION_TOKEN, SessionStore.getSessionToken())
-    .set('Content-Type', 'application/json')
+    .type('json')
     .send(data)
     .end(function(error, res) {
       if(__DEV__) {
@@ -57,17 +57,48 @@ export default {
         TimelineActions.addItemFail();
       } else {
         const json = JSON.parse(res.text);
-        TimelineActions.addItemSuccess(json);
+        TimelineActions.addItemSuccess(json.objectId);
       }
     });
-    return data;
+  },
+
+  updateTimeline(id, data) {
+    request.put(`${API_ENDPOINTS.TIMELINE}/${id}`)
+    .set(API_HEADERS.APP_ID, LEANCLOUD.APP_ID)
+    .set(API_HEADERS.APP_KEY, LEANCLOUD.APP_KEY)
+    .set(API_HEADERS.SESSION_TOKEN, SessionStore.getSessionToken())
+    .type('json')
+    .send(data)
+    .end(function(error, res) {
+      if(__DEV__) {
+        console.log('updateTimeline', res, error);
+      }
+      if (error) {
+        TimelineActions.updateItemFail(id);
+      } else {
+        TimelineActions.updateItemSuccess(id);
+      }
+    });
+  },
+
+  deleteTimeline(id) {
+    request.post(`${API_ENDPOINTS.TIMELINE}/${id}`)
+    .set(API_HEADERS.APP_ID, LEANCLOUD.APP_ID)
+    .set(API_HEADERS.APP_KEY, LEANCLOUD.APP_KEY)
+    .set(API_HEADERS.SESSION_TOKEN, SessionStore.getSessionToken())
+    .type('json')
+    .send({
+      _method: 'DELETE'
+    })
+    .end(function(error, res) {
+      if(__DEV__) {
+        console.log('deleteTimeline', res, error);
+      }
+      if (error) {
+        TimelineActions.deleteItemFail(id);
+      } else {
+        TimelineActions.deleteItemSuccess(id);
+      }
+    });
   }
-
-  // updateTimeline(id, data) {
-
-  // },
-
-  // deleteTimeline(id) {
-
-  // }
 };
