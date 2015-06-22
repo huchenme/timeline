@@ -1,7 +1,7 @@
 import {OrderedMap, Map, List} from 'immutable';
 import moment from 'moment';
 
-import {USER_ID} from 'js/constants/AppConstants';
+import LEANCLOUD from 'js/constants/LeanCloud';
 
 const timelineListfromJson = (json) => {
   let list = OrderedMap();
@@ -23,8 +23,9 @@ const timelineToJson = (data) => {
   })).set('createdBy', Map({
     __type: 'Pointer',
     className: '_User',
-    objectId: USER_ID
-  })).toJS();
+    objectId: LEANCLOUD.USER_ID
+  })).set('deleted', false)
+  .toJS();
 };
 
 const timelineUpdateJson = (data) => {

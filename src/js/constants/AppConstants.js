@@ -1,3 +1,5 @@
+import LEANCLOUD from 'js/constants/LeanCloud';
+
 const TABS = {
   ALL: 'ALL',
   FEATURED: 'FEATURED'
@@ -27,44 +29,30 @@ const ASYNC_REQUEST_STATUS = {
 
 const APIRoot = 'https://api.LEANCLOUD.cn/1.1';
 
-const API_ENDPOINTS = {
-  LOGIN: `${APIRoot}/login`,
-  CLOUDQUERY: `${APIRoot}/cloudQuery`,
-  TIMELINE: `${APIRoot}/classes/Timeline`
-};
-
-const API_HEADERS = {
-  APP_ID: 'X-AVOSCloud-Application-Id',
-  APP_KEY: 'X-AVOSCloud-Application-Key',
-  SESSION_TOKEN: 'X-AVOSCloud-Session-Token'
-};
-
 const CHANGE = 'CHANGE';
 
-let LEANCLOUD, USER_ID;
-
-if(__DEV__) {
-  LEANCLOUD = {
-    APP_ID: '7yc0iyc5weusb69w93xjao0ljfibarygf20lmf0sl9ko0zgn',
-    APP_KEY: '29k8l8a2k2ybpp89vupdurljrt91grc1fy0xq3t2d8h17jco'
-  };
-  USER_ID = '557ff120e4b0d02dc2e964f6';
-} else {
-  LEANCLOUD = {
-    APP_ID: '7jb2qe0qp3q33s0kv5jytvmn092f8gvjyl8mgziq9do0il1q',
-    APP_KEY: '4s191cwd3rdkqtg7c9hhfasmqhyck0bdsoerpms3fd1wosi6'
-  };
-  USER_ID = '55819547e4b035745adaa1de';
-}
+const API = {
+  ROOT: 'https://api.LEANCLOUD.cn/1.1',
+  ENDPOINTS: {
+    LOGIN: `${APIRoot}/login`,
+    CLOUDQUERY: `${APIRoot}/cloudQuery`,
+    TIMELINE: `${APIRoot}/classes/Timeline`
+  },
+  QUERYS: {
+    ALL_TIMELINE: `select * from Timeline where createdBy=pointer('_User', '${LEANCLOUD.USER_ID}') and deleted=false order by date desc`
+  },
+  HEADERS: {
+    APP_ID: 'X-AVOSCloud-Application-Id',
+    APP_KEY: 'X-AVOSCloud-Application-Key',
+    SESSION_TOKEN: 'X-AVOSCloud-Session-Token'
+  }
+};
 
 export {
   TABS,
   TIMELINE_ACTIONS,
   SESSION_ACTIONS,
   CHANGE,
-  API_ENDPOINTS,
-  API_HEADERS,
-  LEANCLOUD,
-  USER_ID,
+  API,
   ASYNC_REQUEST_STATUS
 };

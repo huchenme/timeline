@@ -46,5 +46,8 @@ module.exports = {
     definePlugin,
     new WebpackNotifierPlugin(),
     new ExtractTextPlugin('bundle.css')
-  ]
+  ],
+  node: {
+    fs: 'empty'
+  }
 };

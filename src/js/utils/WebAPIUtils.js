@@ -1,15 +1,16 @@
 import request from 'superagent';
 
-import {API_ENDPOINTS, API_HEADERS, LEANCLOUD, USER_ID} from 'js/constants/AppConstants';
+import {API} from 'js/constants/AppConstants';
+import LEANCLOUD from 'js/constants/LeanCloud';
 import SessionActions from 'js/actions/SessionActions';
 import TimelineActions from 'js/actions/TimelineActions';
 import SessionStore from 'js/stores/SessionStore';
 
 export default {
   login(username, password) {
-    request.get(API_ENDPOINTS.LOGIN)
-    .set(API_HEADERS.APP_ID, LEANCLOUD.APP_ID)
-    .set(API_HEADERS.APP_KEY, LEANCLOUD.APP_KEY)
+    request.get(API.ENDPOINTS.LOGIN)
+    .set(API.HEADERS.APP_ID, LEANCLOUD.APP_ID)
+    .set(API.HEADERS.APP_KEY, LEANCLOUD.APP_KEY)
     .query({username: username, password: password})
     .end(function(error, res) {
       if(__DEV__) {
@@ -25,10 +26,10 @@ export default {
   },
 
   loadTimelines() {
-    request.get(API_ENDPOINTS.CLOUDQUERY)
-    .set(API_HEADERS.APP_ID, LEANCLOUD.APP_ID)
-    .set(API_HEADERS.APP_KEY, LEANCLOUD.APP_KEY)
-    .query({cql: `select * from Timeline where createdBy=pointer('_User', '${USER_ID}') order by date desc`})
+    request.get(API.ENDPOINTS.CLOUDQUERY)
+    .set(API.HEADERS.APP_ID, LEANCLOUD.APP_ID)
+    .set(API.HEADERS.APP_KEY, LEANCLOUD.APP_KEY)
+    .query({cql: API.QUERYS.ALL_TIMELINE})
     .end(function(error, res) {
       if(__DEV__) {
         console.log('loadTimelines', res, error);
@@ -43,10 +44,10 @@ export default {
   },
 
   createTimeline(data) {
-    request.post(API_ENDPOINTS.TIMELINE)
-    .set(API_HEADERS.APP_ID, LEANCLOUD.APP_ID)
-    .set(API_HEADERS.APP_KEY, LEANCLOUD.APP_KEY)
-    .set(API_HEADERS.SESSION_TOKEN, SessionStore.getSessionToken())
+    request.post(API.ENDPOINTS.TIMELINE)
+    .set(API.HEADERS.APP_ID, LEANCLOUD.APP_ID)
+    .set(API.HEADERS.APP_KEY, LEANCLOUD.APP_KEY)
+    .set(API.HEADERS.SESSION_TOKEN, SessionStore.getSessionToken())
     .type('json')
     .send(data)
     .end(function(error, res) {
@@ -63,10 +64,10 @@ export default {
   },
 
   updateTimeline(id, data) {
-    request.put(`${API_ENDPOINTS.TIMELINE}/${id}`)
-    .set(API_HEADERS.APP_ID, LEANCLOUD.APP_ID)
-    .set(API_HEADERS.APP_KEY, LEANCLOUD.APP_KEY)
-    .set(API_HEADERS.SESSION_TOKEN, SessionStore.getSessionToken())
+    request.put(`${API.ENDPOINTS.TIMELINE}/${id}`)
+    .set(API.HEADERS.APP_ID, LEANCLOUD.APP_ID)
+    .set(API.HEADERS.APP_KEY, LEANCLOUD.APP_KEY)
+    .set(API.HEADERS.SESSION_TOKEN, SessionStore.getSessionToken())
     .type('json')
     .send(data)
     .end(function(error, res) {
@@ -82,14 +83,12 @@ export default {
   },
 
   deleteTimeline(id) {
-    request.post(`${API_ENDPOINTS.TIMELINE}/${id}`)
-    .set(API_HEADERS.APP_ID, LEANCLOUD.APP_ID)
-    .set(API_HEADERS.APP_KEY, LEANCLOUD.APP_KEY)
-    .set(API_HEADERS.SESSION_TOKEN, SessionStore.getSessionToken())
+    request.put(`${API.ENDPOINTS.TIMELINE}/${id}`)
+    .set(API.HEADERS.APP_ID, LEANCLOUD.APP_ID)
+    .set(API.HEADERS.APP_KEY, LEANCLOUD.APP_KEY)
+    .set(API.HEADERS.SESSION_TOKEN, SessionStore.getSessionToken())
     .type('json')
-    .send({
-      _method: 'DELETE'
-    })
+    .send({deleted: true})
     .end(function(error, res) {
       if(__DEV__) {
         console.log('deleteTimeline', res, error);

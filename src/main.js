@@ -20,4 +20,3 @@ const routes = (
 Router.run(routes, Router.HashLocation, (Root) => {
   React.render(<Root/>, document.body);
 });
-
