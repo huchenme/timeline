@@ -10,7 +10,7 @@ export default React.createClass({
   propTypes: {
     onFormSubmit: PropTypes.func.isRequired,
     onFormCancel: PropTypes.func,
-    item: PropTypes.instanceOf(Map)
+    item: PropTypes.instanceOf(Map),
   },
 
   mixins: [React.addons.LinkedStateMixin],
@@ -27,27 +27,88 @@ export default React.createClass({
       date: date,
       text: (item && item.get('text')) || '',
       featured: (item && item.get('featured')) || false,
-      images: (item && item.get('images')) || List(),
+      images: (item && item.get('images')) || new List(),
       dateError: null,
-      textError: null
+      textError: null,
     };
+  },
+
+  render() {
+    let buttons;
+    if (this.props.item) {
+      buttons = (
+        <div>
+          <a onClick={this._onCancelClick}>Cancel</a>
+          <button type="submit">Save change</button>
+        </div>
+      );
+    } else {
+      buttons = (
+        <button type="submit">Post</button>
+      );
+    }
+    let addImageButton;
+    if (this.state.images.size < MAX_IMAGES) {
+      addImageButton = <a onClick={this._onAddImage}>Add Image</a>;
+    }
+    return (
+      <form className="tl-TimelineForm" onSubmit={this._onSubmit}>
+        <div className="tl-TimelineForm-date">
+          <input
+            className="tl-TimelineForm-dateInput"
+            type="text"
+            placeholder="日期 YYYY-MM-DD"
+            valueLink={this.linkState('date')} />
+        </div>
+        <div className="tl-TimelineForm-text">
+          <textarea
+            className="tl-TimelineForm-textInput"
+            placeholder="Type something..."
+            valueLink={this.linkState('text')} />
+        </div>
+        <div>
+          <label>
+            <input type="checkbox"
+              checkedLink={this.linkState('featured')} />
+            Featured
+          </label>
+          {addImageButton}
+        </div>
+        <div>
+          <ul>
+            {this.state.images.map((image, index) =>
+              <li key={index}>
+                <input
+                  type="text"
+                  placeholder="image url"
+                  onChange={this._onImageChange.bind(this, index)}
+                  value={image} />
+                <a onClick={this._onRemoveImage.bind(this, index)}>x</a>
+              </li>
+            )}
+          </ul>
+        </div>
+        {buttons}
+      </form>
+    );
   },
 
   _onSubmit(e) {
     e.preventDefault();
-    let dateError, textError;
+    let dateError;
+    let textError;
     const textInput = this.state.text;
     const dateInput = this.state.date;
-    if(textInput.trim() === '') {
+    if (textInput.trim() === '') {
       textError = 'empty text';
       console.log('empty text');
     } else {
       textError = null;
     }
-    if(dateInput.trim() === '') {
+    if (dateInput.trim() === '') {
       dateError = 'empty date';
       console.log('empty date');
-    } else if(!this._isValidDate(dateInput.trim())) {
+    } else if (!this._isValidDate(dateInput.trim())) {
       dateError = 'invalid date';
       console.log('invalid date');
     } else {
@@ -55,21 +116,21 @@ export default React.createClass({
     }
     this.setState({
       dateError: dateError,
-      textError: textError
+      textError: textError,
     });
-    if(dateError === null && textError === null) {
+    if (dateError === null && textError === null) {
       const objectDate = moment(dateInput);
-      this.props.onFormSubmit(Map({
+      this.props.onFormSubmit(new Map({
         date: objectDate,
         text: textInput,
         featured: this.state.featured,
-        images: this.state.images.filterNot(image => image.trim() === '')
+        images: this.state.images.filterNot(image => image.trim() === ''),
       }));
       this.setState({
         date: moment().format('YYYY-MM-DD'),
         text: '',
         featured: false,
-        images: List()
+        images: new List(),
       });
     }
   },
@@ -83,7 +144,7 @@ export default React.createClass({
   },
 
   _onAddImage() {
-    if(this.state.images.size < MAX_IMAGES) {
+    if (this.state.images.size < MAX_IMAGES) {
       this.setState({images: this.state.images.push('')});
     }
   },
@@ -96,63 +157,4 @@ export default React.createClass({
     this.setState({images: this.state.images.set(index, e.target.value.trim())});
   },
 
-  render() {
-    let buttons;
-    if (this.props.item) {
-      buttons = (
-        <div>
-          <a onClick={this._onCancelClick}>Cancel</a>
-          <button type='submit'>Save change</button>
-        </div>
-      );
-    } else {
-      buttons = (
-        <button type='submit'>Post</button>
-      );
-    }
-    let addImageButton;
-    if (this.state.images.size < MAX_IMAGES) {
-      addImageButton = <a onClick={this._onAddImage}>Add Image</a>;
-    }
-    return (
-      <form className='tl-TimelineForm' onSubmit={this._onSubmit}>
-        <div className='tl-TimelineForm-date'>
-          <input
-            className='tl-TimelineForm-dateInput'
-            type='text'
-            placeholder='日期 YYYY-MM-DD'
-            valueLink={this.linkState('date')} />
-        </div>
-        <div className='tl-TimelineForm-text'>
-          <textarea
-            className='tl-TimelineForm-textInput'
-            placeholder='Type something...'
-            valueLink={this.linkState('text')} />
-        </div>
-        <div>
-          <label>
-            <input type='checkbox'
-              checkedLink={this.linkState('featured')} />
-            Featured
-          </label>
-          {addImageButton}
-        </div>
-        <div>
-          <ul>
-            {this.state.images.map((image, index) =>
-              <li key={index}>
-                <input
-                  type='text'
-                  placeholder='image url'
-                  onChange={this._onImageChange.bind(this, index)}
-                  value={image} />
-                <a onClick={this._onRemoveImage.bind(this, index)}>x</a>
-              </li>
-            )}
-          </ul>
-        </div>
-        {buttons}
-      </form>
-    );
-  }
 });

@@ -6,62 +6,43 @@ import marked from 'marked';
 import TimelineForm from 'js/components/TimelineForm';
 import TimelineActions from 'js/actions/TimelineActions';
 import SessionStore from 'js/stores/SessionStore';
-import StoreMixin from 'js/mixins/StoreMixin';
+import storeMixin from 'js/mixins/StoreMixin';
 
 marked.setOptions({
-  sanitize: true
+  sanitize: true,
 });
 
 export default React.createClass({
   propTypes: {
     id: PropTypes.string.isRequired,
-    item: PropTypes.instanceOf(Map).isRequired
+    item: PropTypes.instanceOf(Map).isRequired,
   },
 
-  mixins: [StoreMixin(SessionStore)],
+  mixins: [storeMixin(SessionStore)],
 
   getInitialState() {
     return {
-      isEditing: false
+      isEditing: false,
     };
   },
 
   getStateFromStores() {
     return {
-      isLoggedIn: SessionStore.isLoggedIn()
+      isLoggedIn: SessionStore.isLoggedIn(),
     };
   },
 
-  _onClickEdit(e) {
-    e.preventDefault();
-    this.setState({isEditing: true});
-  },
-
-  _onClickDelete(e) {
-    e.preventDefault();
-    if (confirm('Are you sure?')) {
-      TimelineActions.deleteItem(this.props.id);
-    }
-  },
-
-  _onSave(item) {
-    TimelineActions.updateItem(this.props.id, item);
-    this.setState({isEditing: false});
-  },
-
-  _onCancel() {
-    this.setState({isEditing: false});
-  },
-
   render() {
-    let item = this.props.item;
+    const item = this.props.item;
     const rawMarkup = marked(item.get('text'));
-    let inputNode, itemNode, userActions;
+    let inputNode;
+    let itemNode;
+    let userActions;
     if (this.state.isLoggedIn) {
       userActions = (
         <div>
-          <a href='#' onClick={this._onClickEdit}>Edit</a>
-          <a href='#' onClick={this._onClickDelete}>Delete</a>
+          <a onClick={this._onClickEdit}>Edit</a>
+          <a onClick={this._onClickDelete}>Delete</a>
         </div>
       );
     }
@@ -93,5 +74,27 @@ export default React.createClass({
         {itemNode}
       </div>
     );
-  }
+  },
+
+  _onClickEdit(e) {
+    e.preventDefault();
+    this.setState({isEditing: true});
+  },
+
+  _onClickDelete(e) {
+    e.preventDefault();
+    if (confirm('Are you sure?')) {
+      TimelineActions.deleteItem(this.props.id);
+    }
+  },
+
+  _onSave(item) {
+    TimelineActions.updateItem(this.props.id, item);
+    this.setState({isEditing: false});
+  },
+
+  _onCancel() {
+    this.setState({isEditing: false});
+  },
+
 });

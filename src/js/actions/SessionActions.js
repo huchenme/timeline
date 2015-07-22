@@ -7,7 +7,7 @@ export default {
     AppDispatcher.dispatch({
       actionType: SESSION_ACTIONS.LOGIN_REQUEST,
       username: username,
-      password: password
+      password: password,
     });
     WebAPIUtils.login(username, password);
   },
@@ -16,14 +16,14 @@ export default {
     AppDispatcher.dispatch({
       actionType: SESSION_ACTIONS.LOGIN_RESPONSE,
       json: json,
-      error: false
+      error: false,
     });
   },
 
   loginFail() {
     AppDispatcher.dispatch({
       actionType: SESSION_ACTIONS.LOGIN_RESPONSE,
-      error: true
+      error: true,
     });
-  }
+  },
 };

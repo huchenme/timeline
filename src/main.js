@@ -10,9 +10,9 @@ require('normalize.css');
 require('css/base');
 
 const routes = (
-  <Route path='/' handler={App}>
+  <Route path="/" handler={App}>
     <DefaultRoute handler={Home}/>
-    <Route path='login' handler={Login}/>
+    <Route path="login" handler={Login}/>
     <NotFoundRoute handler={NoMatch} />
   </Route>
 );

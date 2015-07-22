@@ -7,27 +7,27 @@ import {TABS} from 'js/constants/AppConstants';
 
 export default React.createClass({
   propTypes: {
-    list: PropTypes.instanceOf(OrderedMap).isRequired
+    list: PropTypes.instanceOf(OrderedMap).isRequired,
   },
 
   getInitialState() {
     return {
-      activeTab: TABS.ALL
+      activeTab: TABS.ALL,
     };
   },
 
+  onChangeTab(newTab) {
+    if (newTab !== this.state.activeTab) {
+      this.setState({activeTab: newTab});
+    }
+  },
+
   getList() {
-    switch(this.state.activeTab) {
+    switch (this.state.activeTab) {
       case TABS.FEATURED:
         return this.props.list.filter(item => item.get('featured'));
       default:
         return this.props.list;
-    }
-  },
-
-  onChangeTab(newTab) {
-    if(newTab !== this.state.activeTab) {
-      this.setState({activeTab: newTab});
     }
   },
 
@@ -44,5 +44,5 @@ export default React.createClass({
         )}
       </div>
     );
-  }
+  },
 });

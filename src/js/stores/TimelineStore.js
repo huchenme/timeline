@@ -6,7 +6,7 @@ import {TIMELINE_ACTIONS, CHANGE, ASYNC_REQUEST_STATUS} from 'js/constants/AppCo
 import AppDispatcher from 'js/dispatcher/AppDispatcher';
 import {timelineListfromJson} from 'js/utils/DataSerializer';
 
-let _timelines = OrderedMap();
+let _timelines = new OrderedMap();
 let _appStatus = ASYNC_REQUEST_STATUS.IDLE;
 let _createStatus = ASYNC_REQUEST_STATUS.IDLE;
 let _newTimeline;
@@ -38,17 +38,17 @@ const TimelineStore = assign({}, EventEmitter.prototype, {
 
   nextTimelineId() {
     return (new Date() + Math.floor(Math.random() * 999999)).toString(36);
-  }
+  },
 });
 
 TimelineStore.dispatchToken = AppDispatcher.register(action => {
-  switch(action.actionType) {
+  switch (action.actionType) {
     case TIMELINE_ACTIONS.LOAD_TIMELINES:
       _appStatus = ASYNC_REQUEST_STATUS.REQUESTING;
       break;
 
     case TIMELINE_ACTIONS.LOAD_TIMELINES_RESPONSE:
-      if(action.error) {
+      if (action.error) {
         _appStatus = ASYNC_REQUEST_STATUS.FAILED;
       } else {
         _appStatus = ASYNC_REQUEST_STATUS.IDLE;
@@ -62,7 +62,7 @@ TimelineStore.dispatchToken = AppDispatcher.register(action => {
       break;
 
     case TIMELINE_ACTIONS.ADD_TIMELINE_RESPONSE:
-      if(action.error) {
+      if (action.error) {
         _createStatus = ASYNC_REQUEST_STATUS.FAILED;
       } else {
         _createStatus = ASYNC_REQUEST_STATUS.IDLE;
@@ -76,10 +76,12 @@ TimelineStore.dispatchToken = AppDispatcher.register(action => {
       break;
 
     case TIMELINE_ACTIONS.UPDATE_TIMELINE_RESPONSE:
-      if(action.error) {
-        console.log('update fail');
-      } else {
-        console.log('update success');
+      if (__DEV__) {
+        if (action.error) {
+          console.log('update fail');
+        } else {
+          console.log('update success');
+        }
       }
       break;
 
@@ -88,10 +90,12 @@ TimelineStore.dispatchToken = AppDispatcher.register(action => {
       break;
 
     case TIMELINE_ACTIONS.DELETE_TIMELINE_RESPONSE:
-      if(action.error) {
-        console.log('delete fail');
-      } else {
-        console.log('delete success');
+      if (__DEV__) {
+        if (action.error) {
+          console.log('delete fail');
+        } else {
+          console.log('delete success');
+        }
       }
       break;
 

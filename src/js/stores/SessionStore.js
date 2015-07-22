@@ -26,12 +26,12 @@ const SessionStore = assign({}, EventEmitter.prototype, {
 
   getSessionToken() {
     return _sessionToken;
-  }
+  },
 
 });
 
 SessionStore.dispatchToken = AppDispatcher.register(action => {
-  switch(action.actionType) {
+  switch (action.actionType) {
     case SESSION_ACTIONS.LOGIN_RESPONSE:
       if (action.json && action.json.sessionToken) {
         _sessionToken = action.json.sessionToken;

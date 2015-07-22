@@ -12,9 +12,9 @@ export default {
     .set(API.HEADERS.APP_ID, LEANCLOUD.APP_ID)
     .set(API.HEADERS.APP_KEY, LEANCLOUD.APP_KEY)
     .query({username: username, password: password})
-    .end(function(error, res) {
-      if(__DEV__) {
-        console.log('login', res, error);
+    .end((error, res) => {
+      if (__DEV__) {
+        console.log('login', res, error); // eslint-disable-line no-console
       }
       if (error) {
         SessionActions.loginFail();
@@ -30,9 +30,9 @@ export default {
     .set(API.HEADERS.APP_ID, LEANCLOUD.APP_ID)
     .set(API.HEADERS.APP_KEY, LEANCLOUD.APP_KEY)
     .query({cql: API.QUERYS.ALL_TIMELINE})
-    .end(function(error, res) {
-      if(__DEV__) {
-        console.log('loadTimelines', res, error);
+    .end((error, res) => {
+      if (__DEV__) {
+        console.log('loadTimelines', res, error); // eslint-disable-line no-console
       }
       if (error) {
         TimelineActions.loadTimelinesFail();
@@ -50,9 +50,9 @@ export default {
     .set(API.HEADERS.SESSION_TOKEN, SessionStore.getSessionToken())
     .type('json')
     .send(data)
-    .end(function(error, res) {
-      if(__DEV__) {
-        console.log('createTimeline', res, error);
+    .end((error, res) => {
+      if (__DEV__) {
+        console.log('createTimeline', res, error); // eslint-disable-line no-console
       }
       if (error) {
         TimelineActions.addItemFail();
@@ -70,9 +70,9 @@ export default {
     .set(API.HEADERS.SESSION_TOKEN, SessionStore.getSessionToken())
     .type('json')
     .send(data)
-    .end(function(error, res) {
-      if(__DEV__) {
-        console.log('updateTimeline', res, error);
+    .end((error, res) => {
+      if (__DEV__) {
+        console.log('updateTimeline', res, error); // eslint-disable-line no-console
       }
       if (error) {
         TimelineActions.updateItemFail(id);
@@ -89,9 +89,9 @@ export default {
     .set(API.HEADERS.SESSION_TOKEN, SessionStore.getSessionToken())
     .type('json')
     .send({deleted: true})
-    .end(function(error, res) {
-      if(__DEV__) {
-        console.log('deleteTimeline', res, error);
+    .end((error, res) => {
+      if (__DEV__) {
+        console.log('deleteTimeline', res, error); // eslint-disable-line no-console
       }
       if (error) {
         TimelineActions.deleteItemFail(id);
@@ -99,5 +99,5 @@ export default {
         TimelineActions.deleteItemSuccess(id);
       }
     });
-  }
+  },
 };

@@ -5,11 +5,11 @@ import TimelineList from 'js/components/TimelineList';
 import TimelineStore from 'js/stores/TimelineStore';
 import SessionStore from 'js/stores/SessionStore';
 import TimelineActions from 'js/actions/TimelineActions';
-import StoreMixin from 'js/mixins/StoreMixin';
+import storeMixin from 'js/mixins/StoreMixin';
 
 export default React.createClass({
 
-  mixins: [StoreMixin(TimelineStore, SessionStore)],
+  mixins: [storeMixin(TimelineStore, SessionStore)],
 
   componentDidMount() {
     TimelineActions.loadTimelines();
@@ -20,17 +20,13 @@ export default React.createClass({
       list: TimelineStore.getAllItems(),
       appStatus: TimelineStore.getAppStatus(),
       createStatus: TimelineStore.getCreateStatus(),
-      isLoggedIn: SessionStore.isLoggedIn()
+      isLoggedIn: SessionStore.isLoggedIn(),
     };
-  },
-
-  _onNewTimelineSubmit(item) {
-    TimelineActions.addItem(item);
   },
 
   render() {
     let newForm;
-    if(this.state.isLoggedIn) {
+    if (this.state.isLoggedIn) {
       newForm = (
         <div>
           <TimelineForm onFormSubmit={this._onNewTimelineSubmit} />
@@ -47,5 +43,9 @@ export default React.createClass({
         <TimelineList list={this.state.list} />
       </div>
     );
-  }
+  },
+
+  _onNewTimelineSubmit(item) {
+    TimelineActions.addItem(item);
+  },
 });

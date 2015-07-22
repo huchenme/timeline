@@ -6,7 +6,7 @@ import {timelineToJson, timelineUpdateJson} from 'js/utils/DataSerializer';
 export default {
   loadTimelines() {
     AppDispatcher.dispatch({
-      actionType: TIMELINE_ACTIONS.LOAD_TIMELINES
+      actionType: TIMELINE_ACTIONS.LOAD_TIMELINES,
     });
     WebAPIUtils.loadTimelines();
   },
@@ -14,7 +14,7 @@ export default {
   loadTimelinesFail() {
     AppDispatcher.dispatch({
       actionType: TIMELINE_ACTIONS.LOAD_TIMELINES_RESPONSE,
-      error: true
+      error: true,
     });
   },
 
@@ -22,14 +22,14 @@ export default {
     AppDispatcher.dispatch({
       actionType: TIMELINE_ACTIONS.LOAD_TIMELINES_RESPONSE,
       json: json,
-      error: false
+      error: false,
     });
   },
 
   addItem(item) {
     AppDispatcher.dispatch({
       actionType: TIMELINE_ACTIONS.ADD_TIMELINE,
-      item: item
+      item: item,
     });
     WebAPIUtils.createTimeline(timelineToJson(item));
   },
@@ -37,7 +37,7 @@ export default {
   addItemFail() {
     AppDispatcher.dispatch({
       actionType: TIMELINE_ACTIONS.ADD_TIMELINE_RESPONSE,
-      error: true
+      error: true,
     });
   },
 
@@ -45,7 +45,7 @@ export default {
     AppDispatcher.dispatch({
       actionType: TIMELINE_ACTIONS.ADD_TIMELINE_RESPONSE,
       id: id,
-      error: false
+      error: false,
     });
   },
 
@@ -53,7 +53,7 @@ export default {
     AppDispatcher.dispatch({
       actionType: TIMELINE_ACTIONS.UPDATE_TIMELINE,
       id: id,
-      item: item
+      item: item,
     });
     WebAPIUtils.updateTimeline(id, timelineUpdateJson(item));
   },
@@ -62,7 +62,7 @@ export default {
     AppDispatcher.dispatch({
       actionType: TIMELINE_ACTIONS.UPDATE_TIMELINE_RESPONSE,
       error: true,
-      id: id
+      id: id,
     });
   },
 
@@ -70,14 +70,14 @@ export default {
     AppDispatcher.dispatch({
       actionType: TIMELINE_ACTIONS.UPDATE_TIMELINE_RESPONSE,
       error: false,
-      id: id
+      id: id,
     });
   },
 
   deleteItem(id) {
     AppDispatcher.dispatch({
       actionType: TIMELINE_ACTIONS.DELETE_TIMELINE,
-      id: id
+      id: id,
     });
     WebAPIUtils.deleteTimeline(id);
   },
@@ -86,7 +86,7 @@ export default {
     AppDispatcher.dispatch({
       actionType: TIMELINE_ACTIONS.DELETE_TIMELINE_RESPONSE,
       error: true,
-      id: id
+      id: id,
     });
   },
 
@@ -94,7 +94,7 @@ export default {
     AppDispatcher.dispatch({
       actionType: TIMELINE_ACTIONS.DELETE_TIMELINE_RESPONSE,
       error: false,
-      id: id
+      id: id,
     });
-  }
+  },
 };

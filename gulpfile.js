@@ -1,3 +1,4 @@
+/*eslint-disable func-names */
 const gulp = require('gulp');
 const del = require('del');
 const $ = require('gulp-load-plugins')();
@@ -12,11 +13,11 @@ gulp.task('eslint', function() {
 });
 
 gulp.task('webpack', $.shell.task([
-  'BUILD_DEV=1 ./node_modules/.bin/webpack'
+  'BUILD_DEV=1 ./node_modules/.bin/webpack',
 ]));
 
 gulp.task('watch:webpack', $.shell.task([
-  'BUILD_DEV=1 ./node_modules/.bin/webpack --watch --progress --color'
+  'BUILD_DEV=1 ./node_modules/.bin/webpack --watch --progress --color',
 ]));
 
 gulp.task('watch:lint', function() {
@@ -27,7 +28,7 @@ gulp.task('watch', ['eslint', 'watch:lint']);
 
 gulp.task('clean', function(cb) {
   del([
-    'public/**/*', '!public/favicon.ico'
+    'public/**/*', '!public/favicon.ico',
   ], cb);
 });
 
@@ -36,9 +37,9 @@ gulp.task('deploy', ['clean'], $.shell.task([
   'git add -A public/*',
   'git commit -m "pushing production assets"',
   'git push origin master',
-  'avoscloud -g deploy'
+  'avoscloud -g deploy',
 ], {
-  ignoreErrors: true
+  ignoreErrors: true,
 }));
 
 gulp.task('default', ['eslint', 'webpack']);

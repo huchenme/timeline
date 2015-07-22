@@ -6,7 +6,7 @@ import SessionActions from 'js/actions/SessionActions';
 
 function getState() {
   return {
-    isLoggedIn: SessionStore.isLoggedIn()
+    isLoggedIn: SessionStore.isLoggedIn(),
   };
 }
 
@@ -28,6 +28,16 @@ export default React.createClass({
     SessionStore.removeChangeListener(this._onChange);
   },
 
+  render() {
+    return (
+      <form onSubmit={this._onSubmit}>
+        <input type="text" ref="username" placeholder="Username" autoFocus />
+        <input type="password" ref="password" placeholder="Password" />
+        <button type="submit">Login</button>
+      </form>
+    );
+  },
+
   _onChange() {
     this.setState(getState());
     if (this.state.isLoggedIn) {
@@ -44,14 +54,4 @@ export default React.createClass({
     }
     SessionActions.login(usernameInput, passwordInput);
   },
-
-  render() {
-    return (
-      <form onSubmit={this._onSubmit}>
-        <input type='text' ref='username' placeholder='Username' autoFocus />
-        <input type='password' ref='password' placeholder='Password' />
-        <button type='submit'>Login</button>
-      </form>
-    );
-  }
 });

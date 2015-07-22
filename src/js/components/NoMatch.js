@@ -7,5 +7,5 @@ export default React.createClass({
         No Match
       </div>
     );
-  }
+  },
 });
