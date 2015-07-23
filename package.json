@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "start": "avoscloud -P 4567",
-    "watch": "gulp watch",
+    "watch": "gulp watch:webpack",
+    "lint": "gulp eslint && scss-lint",
     "deploy": "gulp deploy",
     "publish": "avoscloud publish"
   },
@@ -33,6 +34,7 @@
     "eslint": "^0.24.1",
     "eslint-plugin-react": "^3.0.0",
     "extract-text-webpack-plugin": "^0.8.2",
+    "file-loader": "^0.8.4",
     "flux": "^2.0.3",
     "gulp": "^3.9.0",
     "gulp-eslint": "^0.15.0",
@@ -55,6 +57,7 @@
     "sass-loader": "^1.0.2",
     "style-loader": "^0.12.3",
     "superagent": "^1.2.0",
+    "url-loader": "^0.5.6",
     "webpack": "^1.10.1",
     "webpack-notifier": "^1.2.1"
   },

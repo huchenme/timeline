@@ -1,13 +1,13 @@
 import React from 'react';
 import Router, { Route, NotFoundRoute, DefaultRoute } from 'react-router';
 
-import App from 'js/components/App';
-import Home from 'js/components/Home';
-import Login from 'js/components/Login';
-import NoMatch from 'js/components/NoMatch';
+import App from 'components/App';
+import Home from 'components/Home';
+import Login from 'components/Login';
+import NoMatch from 'components/NoMatch';
 
-require('normalize.css');
-require('css/base');
+require('materialize');
+require('base');
 
 const routes = (
   <Route path="/" handler={App}>
