@@ -1,24 +1,21 @@
-/*global __DEV__*/
-
 import React from 'react';
-import {Flux} from 'fluxxor';
-import App from 'js/components/App';
-import TimelineActions from 'js/actions/TimelineActions';
-import TimelineStore from 'js/stores/TimelineStore';
+import Router, { Route, NotFoundRoute, DefaultRoute } from 'react-router';
 
-const stores = {
-  TimelineStore: new TimelineStore()
-};
+import App from 'components/App';
+import Home from 'components/Home';
+import Login from 'components/Login';
+import NoMatch from 'components/NoMatch';
 
-const flux = new Flux(stores, TimelineActions);
+import 'base.scss';
 
-if (__DEV__) {
-  flux.on('dispatch', function(type, payload) {
-    console.log('[Dispatch]', type, payload);
-  });
-}
+const routes = (
+  <Route path="/" handler={App}>
+    <DefaultRoute handler={Home}/>
+    <Route path="login" handler={Login}/>
+    <NotFoundRoute handler={NoMatch} />
+  </Route>
+);
 
-require('normalize.css');
-require('css/base');
-
-React.render(<App />, document.getElementById('main'));
+Router.run(routes, Router.HashLocation, (Root) => {
+  React.render(<Root/>, document.body);
+});

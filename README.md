@@ -19,7 +19,7 @@
 4. `cp leancloud/config/global.json.sample leancloud/config/global.json` 并替换 key
 5. `npm intall` 安装 dependencies
 6. `npm run watch` 自动编译
-7. `npm run start` 开始本地服务器
+7. `npm start` 开始本地服务器
 8. 打开浏览器 `http://localhost:4567` 测试
 9. 部署请参考 [第一周：LeanCloud Web hosting & Webpack & PostCSS & SUIT CSS](https://github.com/huchenme/timeline/blob/master/tutorials/week-1.md)
 

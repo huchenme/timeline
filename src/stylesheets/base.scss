@@ -1,0 +1,27 @@
+@import "variables";
+
+a {
+  cursor: pointer;
+  text-decoration: none;
+  color: $color-blue;
+}
+
+html, body {
+  font-family: $font-family;
+  color: $color-text;
+  margin: 0;
+  padding: 0;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}

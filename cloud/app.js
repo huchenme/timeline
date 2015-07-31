@@ -8,10 +8,14 @@ app.use(express.bodyParser());
 
 app.get('/', function(req, res) {
   if (isMobile(req)) {
-    res.render('mobile');
+    res.render('index');
   } else {
     res.render('index');
   }
+});
+
+app.get('/mdl', function(req, res) {
+  res.render('mdl');
 });
 
 app.listen();

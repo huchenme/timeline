@@ -12,7 +12,7 @@ const definePlugin = new webpack.DefinePlugin({
 const sassLoaders = [
   'css?sourceMap',
   'postcss',
-  'sass?includePaths[]=' + path.resolve(__dirname, './src/css')
+  'sass?includePaths[]=' + path.resolve(__dirname, './src/stylesheets')
 ];
 
 module.exports = {
@@ -24,8 +24,8 @@ module.exports = {
   devtool: 'source-map',
   debug: true,
   resolve: {
-    extensions: ['', '.jsx', '.js', '.scss'],
-    modulesDirectories: ['src', 'node_modules']
+    extensions: ['', '.jsx', '.js', '.css'],
+    modulesDirectories: ['src/javascripts', 'src/stylesheets', 'node_modules']
   },
   module: {
     loaders: [
@@ -35,7 +35,10 @@ module.exports = {
         exclude: /node_modules/
       },
       { test: /\.scss$/, loader: ExtractTextPlugin.extract('style', sassLoaders.join('!')) },
-      { test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss') }
+      { test: /\.eot$/,  loader: 'url' },
+      { test: /\.woff2?$/, loader: 'url?limit=10000&mimetype=application/font-woff' },
+      { test: /\.ttf$/,  loader: 'url?limit=10000&mimetype=application/octet-stream' },
+      { test: /\.svg$/,  loader: 'url?limit=10000&mimetype=image/svg+xml' },
     ]
   },
   postcss: [
@@ -46,5 +49,8 @@ module.exports = {
     definePlugin,
     new WebpackNotifierPlugin(),
     new ExtractTextPlugin('bundle.css')
-  ]
+  ],
+  node: {
+    fs: 'empty'
+  }
 };
