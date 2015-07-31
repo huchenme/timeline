@@ -1,16 +1,27 @@
 @import "variables";
 
-body {
+a {
+  cursor: pointer;
+  text-decoration: none;
+  color: $color-blue;
+}
+
+html, body {
   font-family: $font-family;
-  font-size: $font-size;
-  line-height: $line-height;
+  color: $color-text;
+  margin: 0;
+  padding: 0;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  cursor: pointer;
-  color: -webkit-link;
-  text-decoration: underline;
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+img {
+  width: 100%;
+  height: auto;
 }

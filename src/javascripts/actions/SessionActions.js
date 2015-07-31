@@ -12,6 +12,12 @@ export default {
     WebAPIUtils.login(username, password);
   },
 
+  logout() {
+    AppDispatcher.dispatch({
+      actionType: SESSION_ACTIONS.LOGOUT_REQUEST
+    });
+  },
+
   loginSuccess(json) {
     AppDispatcher.dispatch({
       actionType: SESSION_ACTIONS.LOGIN_RESPONSE,

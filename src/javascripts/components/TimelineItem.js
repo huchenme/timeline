@@ -8,6 +8,8 @@ import TimelineActions from 'actions/TimelineActions';
 import SessionStore from 'stores/SessionStore';
 import storeMixin from 'mixins/StoreMixin';
 
+import 'components/TimelineItem.scss';
+
 marked.setOptions({
   sanitize: true,
 });
@@ -81,16 +83,21 @@ export default React.createClass({
     } else {
       itemNode = (
         <div>
-          <p>{moment(item.get('date')).format('YYYY 年 M 月 D 日')}</p>
-          <div dangerouslySetInnerHTML={{__html: rawMarkup}} />
-          <p>Featured: {item.get('featured') ? 'true' : 'false'}</p>
-          {imageNode}
+          <div className='TimelineItem__date'>{moment(item.get('date')).format('YYYY/MM/DD')}</div>
+          <div className='TimelineItem__text' dangerouslySetInnerHTML={{__html: rawMarkup}} />
+          <div className='TimelineItem__images'>
+            {item.get('images').map((image, index) =>
+               <img key={index}
+                  className='TimelineItem__image'
+                  src={image} />
+            )}
+          </div>
           {userActions}
         </div>
       );
     }
     return (
-      <div>
+      <div className='TimelineItem'>
         {inputNode}
         {itemNode}
       </div>

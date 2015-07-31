@@ -39,6 +39,10 @@ SessionStore.dispatchToken = AppDispatcher.register(action => {
         sessionStorage.setItem('sessionToken', _sessionToken);
       }
       break;
+    case SESSION_ACTIONS.LOGOUT_REQUEST:
+      _sessionToken = null;
+      sessionStorage.removeItem('sessionToken');
+      break;
 
     default:
   }

@@ -6,8 +6,7 @@ import Home from 'components/Home';
 import Login from 'components/Login';
 import NoMatch from 'components/NoMatch';
 
-require('materialize');
-require('base');
+import 'base.scss';
 
 const routes = (
   <Route path="/" handler={App}>

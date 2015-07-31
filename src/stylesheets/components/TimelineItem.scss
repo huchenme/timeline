@@ -1,0 +1,40 @@
+.TimelineItem {
+  padding: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+  &__images {
+    margin-top: 8px;
+  }
+
+  &__image {
+    $border-radius: 4px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+    &:first-of-type {
+      border-top-left-radius: $border-radius;
+      border-top-right-radius: $border-radius;
+    }
+
+    &:last-of-type {
+      border-bottom-left-radius: $border-radius;
+      border-bottom-right-radius: $border-radius;
+      border-bottom: none;
+    }
+  }
+
+  &__date {
+    font-size: 16px;
+    line-height: 30px;
+    color: rgba(0,0,0,.54);
+  }
+
+  &__text {
+    p:last-child {
+      margin: 0;
+    }
+  }
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+}

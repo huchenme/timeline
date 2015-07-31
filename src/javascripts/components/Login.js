@@ -19,7 +19,7 @@ export default React.createClass({
 
   componentDidMount() {
     if (this.state.isLoggedIn) {
-      this.transitionTo('/');
+      // this.transitionTo('/');
     }
     SessionStore.addChangeListener(this._onChange);
   },
@@ -29,20 +29,32 @@ export default React.createClass({
   },
 
   render() {
+    let login;
+    let logout;
+    if (this.state.isLoggedIn) {
+      logout = <a onClick={this._onLogout}>logout</a>
+    } else {
+      login = (
+        <form onSubmit={this._onSubmit}>
+          <input type="text" ref="username" placeholder="Username" autoFocus />
+          <input type="password" ref="password" placeholder="Password" />
+          <button type="submit">Login</button>
+        </form>
+      );
+    }
     return (
-      <form onSubmit={this._onSubmit}>
-        <input type="text" ref="username" placeholder="Username" autoFocus />
-        <input type="password" ref="password" placeholder="Password" />
-        <button type="submit">Login</button>
-      </form>
+      <div>
+        {login}
+        {logout}
+      </div>
     );
   },
 
   _onChange() {
     this.setState(getState());
-    if (this.state.isLoggedIn) {
+    // if (this.state.isLoggedIn) {
       this.transitionTo('/');
-    }
+    // }
   },
 
   _onSubmit(e) {
@@ -53,5 +65,9 @@ export default React.createClass({
       return;
     }
     SessionActions.login(usernameInput, passwordInput);
+  },
+
+  _onLogout() {
+    SessionActions.logout();
   },
 });

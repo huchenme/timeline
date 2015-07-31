@@ -35,10 +35,6 @@ export default React.createClass({
     const list = this.getList();
     return (
       <div>
-        <div>
-          <TimelineTab tab={TABS.ALL} onTabClick={this.onChangeTab} />
-          <TimelineTab tab={TABS.FEATURED} onTabClick={this.onChangeTab} />
-        </div>
         {list.map((value, key) =>
           <TimelineItem key={key} id={key} item={value} />
         )}
