@@ -8,7 +8,7 @@
     "start": "avoscloud -P 4567",
     "watch": "gulp watch:webpack",
     "lint": "gulp eslint && scss-lint",
-    "deploy": "gulp deploy",
+    "deploy": "avoscloud -g deploy",
     "publish": "avoscloud publish"
   },
   "repository": {

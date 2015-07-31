@@ -47,7 +47,7 @@ export default React.createClass({
       )
     }
     return (
-      <div className='Home mdl-color--grey-100'>
+      <div className='Home'>
         <div className='mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--overlay-drawer-button'>
           <header className="mdl-layout__header mdl-color--primary">
             <div className="mdl-layout__header-row">
@@ -63,9 +63,9 @@ export default React.createClass({
               <a className="mdl-navigation__link" href="http://huchen.me/contact">Contact</a>
             </nav>
           </div>
-          {newForm}
-          {loading}
           <main className="mdl-layout__content">
+            {newForm}
+            {loading}
             <div className="Home__content">
               <TimelineList list={this.state.list} />
             </div>
